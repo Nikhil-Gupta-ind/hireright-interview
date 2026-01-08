@@ -4,8 +4,8 @@ const CompanionCard = ({ agent: { avatar, name, description }, onSelect }) => {
       <div 
         style={{ width: '214px', height: '250px' }}
         onClick={onSelect}
-        // group-hover:shadow-2xl
-        className="flex flex-col p-3 rounded-[20px] border border-[rgba(88,36,14,0.40)] bg-[#EFDFD3] transition-all duration-300 ease-out transform-gpu group-hover:transform-[rotate(-2deg)_scale(1.1)] group-hover:shadow-2xl group-hover:z-10"
+        // group-hover:shadow-2xl group-hover:z-10
+        className="flex flex-col p-3 rounded-[20px] border border-[rgba(88,36,14,0.40)] bg-[#EFDFD3] transition-all duration-300 ease-out transform-gpu group-hover:transform-[rotate(-2deg)_scale(1.1)]"
       >
         <img 
           src={avatar} 

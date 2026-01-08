@@ -13,13 +13,13 @@ const Interview = ({onInterviewEnd}) => {
   const [count, setCount] = useState(1)
 
   return (
-    <div className={`h-screen ${state === "COMPLETE" ? "bg-(--color-bg)" : "bg-[#FEFEFE]"} p-8 sm:p-12 lg:p-18 relative flex flex-col`}>
+    <div className={`h-screen ${state === "COMPLETE" ? "bg-(--color-bg)" : "bg-[#FEFEFE]"} p-8 sm:p-12 lg:p-18 relative flex flex-col overflow-clip`}>
       {/* {state}
       {isFinished.toString()}
       {isListening.toString()} */}
       
       <HRGradient />
-      <div className="relative z-10 flex flex-col flex-1">
+      <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <InterviewBody
           quesCount={count}
           isListening={isListening}
