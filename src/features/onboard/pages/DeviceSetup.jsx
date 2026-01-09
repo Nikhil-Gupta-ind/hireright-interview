@@ -6,6 +6,7 @@ import CameraIcon from '../../../assets/icons/icon-camera.svg?react'
 import ArrowIcon from "../../../assets/icons/icon-arrow-forward.svg?react"
 import Header from "../components/Header"
 import AudioTest from "../components/AudioTest"
+import BlutoothIcon from '../../../assets/icons/icon-bluetooth.svg?react'
 
 const DeviceSetup = ({onBack, onStartInterview}) => {
   return (
@@ -26,11 +27,21 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
             <DeviceSelect 
               icon={<MicIcon />}
               label='Microphone Array (Realtek(R) Audio)' 
+              options={[
+                {icon: <MicIcon />, label: 'Microphone Array (Realtek(R) Audio)'},
+                {icon: <MicIcon />, label: 'Default Microphone'},
+                {icon: <MicIcon />, label: 'Built-in Microphone'}
+              ]}
             />
             <DeviceSelect
               icon={<SpeakerIcon />} 
               label='Speakers (Realtek(R) Audio)'
               className='mt-4.5'
+              options={[
+                {icon: <BlutoothIcon />, label: 'Speakers (Realtek(R) Audio)'},
+                {icon: <BlutoothIcon />, label: 'Default Speakers'},
+                {icon: <BlutoothIcon />, label: 'Headphones'}
+              ]}
             />
 
             <AudioTest className='mt-4.5' />
@@ -39,6 +50,11 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
               icon={<CameraIcon />}
               label='USB 2.0 HD UVC Webcam'
               className='mt-6.5'
+              options={[
+                {icon: <CameraIcon />, label: 'USB 2.0 HD UVC Webcam'},
+                {icon: <CameraIcon />, label: 'Built-in Camera'},
+                {icon: <CameraIcon />, label: 'External Webcam'}
+              ]}
             />
 
             <button

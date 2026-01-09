@@ -1,11 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import logo from '../../assets/logo.svg';
 import ArrowIcon from '../../assets/icons/icon-arrow-forward.svg?react';
 import RatingBar from '../component/RatingBar';
 
 const Feedback = () => {
 
-  const [rating, setRating] = useState(0); // Default to 3 stars
+  const [rating, setRating] = useState(0);
+
+  useEffect(() => {
+    if (rating === 5) {
+      window.open('https://chatgpt.com', '_blank');
+    }
+  }, [rating]);
 
   return (
     <div className='h-screen w-full bg-(--color-bg) flex flex-col items-center justify-evenly p-18'>
@@ -18,7 +24,7 @@ const Feedback = () => {
                     Interviewing
                 </span> you!
             </p>
-            <button className="rounded-2xl flex items-center justify-center gap-4 py-[18.5px] px-6 text-(--color-primary) active:scale-95 hover:bg-(--color-primary) hover:text-white transition">
+            <button onClick={() => window.open('https://hire-right.ai', '_blank')} className="rounded-2xl flex items-center justify-center gap-4 py-[18.5px] px-6 text-(--color-primary) active:scale-95 hover:bg-(--color-primary) hover:text-white transition">
               Know more about us <ArrowIcon />
             </button>
           </div>
@@ -29,7 +35,7 @@ const Feedback = () => {
             How was you experience? Let us know
           </span>
 
-          <RatingBar />
+          <RatingBar rating={rating} onRatingChange={setRating} />
         </div>
     </div>
   )

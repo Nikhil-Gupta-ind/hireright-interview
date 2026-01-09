@@ -7,6 +7,8 @@ const BAR_GAP = 4;
 const AudioTest = ({ onTestClick, className = "" }) => {
   const barsRef = useRef(null);
   const [barCount, setBarCount] = useState(0);
+  const [isTesting, setIsTesting] = useState(false);
+  const [volume, setVolume] = useState(0);
 
   useEffect(() => {
     const updateBars = () => {
@@ -23,17 +25,35 @@ const AudioTest = ({ onTestClick, className = "" }) => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!isTesting) {
+      setVolume(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setVolume(Math.floor(Math.random() * (barCount + 1)));
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isTesting, barCount]);
+
+  const handleTestClick = () => {
+    setIsTesting(!isTesting);
+    if (onTestClick) onTestClick();
+  };
+
   return (
     <div className={`flex flex-row gap-3 ${className}`}>
 
       {/* Test Button */}
       <button
-        onClick={onTestClick}
-        className="flex gap-2.5 py-4 pl-4.5 pr-6 bg-[#E0E1F9] border border-[#3637A9] rounded-tl-[56px] rounded-bl-[56px] rounded-tr-[18px] rounded-br-[18px] items-center hover:brightness-95 shrink-0"
+        onClick={handleTestClick}
+        className="flex gap-2.5 py-4 pl-4.5 pr-6 bg-[#E0E1F9] border border-[#3637A9] rounded-tl-[56px] rounded-bl-[56px] rounded-tr-[18px] rounded-br-[18px] items-center hover:brightness-95 shrink-0 min-w-28"
       >
         <PlayIcon />
         <span className="text-[#3637A9] font-hanken text-[16px] font-medium leading-[22.4px]">
-          Test
+          {isTesting ? 'Stop' : 'Test'}
         </span>
       </button>
 
@@ -46,7 +66,7 @@ const AudioTest = ({ onTestClick, className = "" }) => {
             <div
               key={i}
               className={`w-3 h-8 rounded-sm ${
-                i < 6 ? "bg-[#6466EA]" : "bg-[#6466EA33]"
+                i < volume ? "bg-[#6466EA]" : "bg-[#6466EA33]"
               }`}
             />
           ))}

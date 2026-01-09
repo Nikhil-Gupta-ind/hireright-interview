@@ -2,8 +2,7 @@ import { useRef, useState } from 'react'
 import StarIcon from '../../assets/icons/icon-star.svg?react'
 import StarFilledIcon from '../../assets/icons/icon-star-filled.svg?react'
 
-const StarRating = () => {
-  const [rating, setRating] = useState(0)
+const StarRating = ({ rating, onRatingChange }) => {
   const [activeIndex, setActiveIndex] = useState(null)
   const containerRef = useRef(null)
 
@@ -17,7 +16,7 @@ const StarRating = () => {
   const updateFromEvent = (e) => {
     const index = getIndexFromPosition(e.clientX)
     setActiveIndex(index)
-    setRating(index + 1)
+    onRatingChange(index + 1)
   }
 
   return (
