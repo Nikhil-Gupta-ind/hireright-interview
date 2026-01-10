@@ -17,7 +17,7 @@ const InterviewFooter = ({ isFinished, onFinish }) => {
 
       <button
         onClick={onFinish}
-        className={`px-6 py-4 rounded-[18px] ${!isFinished ? "bg-(--color-primary)" : "bg-black"} text-white flex items-center gap-3`}
+        className={`px-6 py-4 rounded-[18px] ${!isFinished ? "bg-(--color-primary)" : "bg-black"} text-white flex items-center gap-3 select-none`}
       >
         {buttonLabel}
         <ArrowIcon />

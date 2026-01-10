@@ -10,12 +10,12 @@ const InterviewProgress = ({quesNo, totalQues, agentName, agentSpeaking=false, s
                     src={'https://res.cloudinary.com/djy2jlthj/image/upload/v1765340965/peep-11.png'}
                     alt={`name`}
                     style={{ width: '82px', height: '82px' }}
-                    className="object-contain rounded-full bg-[#D5621B66]"
+                    className="object-contain rounded-full bg-[#D5621B66] select-none"
                     onError={(e) => { e.target.src = 'https://placehold.co/190x144?text=Agent'; }}
                 />}
 
                 <button className={`flex items-center gap-2 px-6 py-4 rounded-full border border-[#0C0C0EA3] ${agentSpeaking ? "text-[#6466EA]" : "text-[#0C0C0EA3]"} transition`}>
-                    <IconAi /> <span className={`text-[16px] text-[#0C0C0EA3] font-medium leading-6`}>{agentName}</span>
+                    <IconAi /> <span className={`text-[16px] text-[#0C0C0EA3] font-medium leading-6 select-none`}>{agentName}</span>
                 </button>
             </div>
             <div>

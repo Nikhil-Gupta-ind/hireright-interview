@@ -10,7 +10,7 @@ const GreetingState = ({className = ''}) => {
               src={'https://res.cloudinary.com/djy2jlthj/image/upload/v1765340965/peep-11.png'}
               alt={`name`}
               style={{ width: '82px', height: '82px' }}
-              className="object-contain rounded-full bg-[#D5621B66]"
+              className="object-contain rounded-full bg-[#D5621B66] select-none"
               onError={(e) => { e.target.src = 'https://placehold.co/190x144?text=Agent'; }}
           />
           {/* Scrollable */}

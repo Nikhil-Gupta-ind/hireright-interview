@@ -19,7 +19,7 @@ const EndingState = ({isComplete, className=''}) => {
 
   return (
     <div className={`${className}`}>   
-      <div className="relative w-32 shrink-0 mr-8 hidden md:block">
+      <div className="relative w-32 shrink-0 mr-8 hidden md:block select-none">
         <img
           src={'https://res.cloudinary.com/djy2jlthj/image/upload/v1765340965/peep-11.png'}
           alt="Agent Avatar"

@@ -6,7 +6,7 @@ import logo from '../../../assets/logo.svg'
 const CameraPreview = () => {
   return (
     // w-[515px] h-96.5 bg-[#D6C5B8]
-    <div className='w-fit h-96.5 rounded-3xl relative flex items-center justify-center overflow-hidden'>
+    <div className='w-fit h-96.5 rounded-3xl relative flex items-center justify-center overflow-hidden select-none'>
         {/* Camera Preview */}
         <img
           src={sample} 

@@ -58,7 +58,7 @@ const InterviewRight = ({ showAnswerCard, showBlurBg, onImageClick }) => {
         )}
 
         {/* Camera Preview */}
-        <motion.div layout className="relative w-full">
+        <motion.div layout className="relative w-full select-none">
           {showBlurBg && (
             <motion.img
               src={showAnswerCard ? fcamBlur2 : fcamBlur}

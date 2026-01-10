@@ -1,3 +1,4 @@
+import { useState } from "react"
 import CameraPreview from "../components/CameraPreview"
 import DeviceSelect from "../components/DeviceSelect"
 import MicIcon from "../../../assets/icons/icon-mic.svg?react"
@@ -9,6 +10,31 @@ import AudioTest from "../components/AudioTest"
 import BlutoothIcon from '../../../assets/icons/icon-bluetooth.svg?react'
 
 const DeviceSetup = ({onBack, onStartInterview}) => {
+
+  const micOptions = [
+    { icon: <MicIcon />, label: 'Microphone Array (Realtek(R) Audio)' },
+    { icon: <MicIcon />, label: 'Default Microphone' },
+    { icon: <MicIcon />, label: 'Built-in Microphone' },
+  ]
+
+  const speakerOptions = [
+    {icon: <SpeakerIcon />, label: 'Speakers (Realtek(R) Audio)'},
+    {icon: <BlutoothIcon />, label: 'Default Speakers'},
+    {icon: <BlutoothIcon />, label: 'Headphones'}
+  ]
+
+  const camOptions = [
+    {icon: <CameraIcon />, label: 'USB 2.0 HD UVC Webcam'},
+    {icon: <CameraIcon />, label: 'Built-in Camera'},
+    {icon: <CameraIcon />, label: 'External Webcam'}
+  ]
+
+  const [mic, setMic] = useState(micOptions[0])
+
+  const [speaker, setSpeaker] = useState(speakerOptions[0])
+
+  const [camera, setCamera] = useState(camOptions[0])
+
   return (
     <div className="min-h-screen bg-(--color-bg) px-4 py-6 sm:p-8 lg:p-16 relative flex flex-col">
       <Header onBack={onBack} />
@@ -24,42 +50,41 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
           {/* Right */}
           <div>
 
-            <DeviceSelect 
-              icon={<MicIcon />}
-              label='Microphone Array (Realtek(R) Audio)' 
-              options={[
-                {icon: <MicIcon />, label: 'Microphone Array (Realtek(R) Audio)'},
-                {icon: <MicIcon />, label: 'Default Microphone'},
-                {icon: <MicIcon />, label: 'Built-in Microphone'}
-              ]}
+            <DeviceSelect
+              selectedOption={mic}
+              options={micOptions}
+              onOptionSelected={setMic}
+              // onOptionSelected={(uiOption) => {
+              //   setMic(uiOption)
+
+              //   const deviceToSelect = availableDevices.find(
+              //     d => d.name === uiOption.label
+              //   )
+
+              //   if (deviceToSelect) {
+              //     audioHandler.selectDevice(deviceToSelect)
+              //   }
+              // }}
             />
             <DeviceSelect
-              icon={<SpeakerIcon />} 
-              label='Speakers (Realtek(R) Audio)'
+              selectedOption={speaker}
+              options={speakerOptions}
               className='mt-4.5'
-              options={[
-                {icon: <BlutoothIcon />, label: 'Speakers (Realtek(R) Audio)'},
-                {icon: <BlutoothIcon />, label: 'Default Speakers'},
-                {icon: <BlutoothIcon />, label: 'Headphones'}
-              ]}
+              onOptionSelected={setSpeaker}
             />
 
-            <AudioTest className='mt-4.5' />
+            <AudioTest className='mt-4.5 select-none' />
 
             <DeviceSelect
-              icon={<CameraIcon />}
-              label='USB 2.0 HD UVC Webcam'
+              selectedOption={camera}
+              options={camOptions}
               className='mt-6.5'
-              options={[
-                {icon: <CameraIcon />, label: 'USB 2.0 HD UVC Webcam'},
-                {icon: <CameraIcon />, label: 'Built-in Camera'},
-                {icon: <CameraIcon />, label: 'External Webcam'}
-              ]}
+              onOptionSelected={setCamera}
             />
 
             <button
               onClick={onStartInterview}
-              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out">
+              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none">
               Start Interview <ArrowIcon />
             </button>
           </div>
