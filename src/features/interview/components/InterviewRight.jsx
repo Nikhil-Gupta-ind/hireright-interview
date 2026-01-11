@@ -5,8 +5,29 @@ import KeyboardIcon from '../../../assets/icons/icon-keyboard.svg?react'
 import AddIcon from '../../../assets/icons/icon-add.svg?react'
 import fcamBlur from '../../../assets/fcam-blur.svg'
 import fcamBlur2 from '../../../assets/fcam-blur2.svg'
+import { useEffect, useState } from "react"
 
 const InterviewRight = ({ showAnswerCard, showBlurBg, onImageClick }) => {
+
+  const INITIAL_TIME = 5 * 60
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME)
+
+  useEffect(() => {
+    if (timeLeft <= 0) return
+
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => prev - 1)
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timeLeft])
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+  }
+
   return (
     <div
       className={`flex flex-col h-full min-h-0
@@ -32,11 +53,11 @@ const InterviewRight = ({ showAnswerCard, showBlurBg, onImageClick }) => {
                 YOUR ANSWER
               </span>
               <button className='flex items-center justify-center gap-2 px-6 p-4 bg-[#FAFAFA] rounded-2xl shadow'>
-                <ClockIcon /> 04:57
+                <ClockIcon /> {formatTime(timeLeft)}
               </button>
             </div>
 
-            <span className="flex-1 min-h-0 max-w-112.75 font-hanken font-medium text-[18px] text-[#393939] leading-[28px] pt-7.5 pb-10 my-2 overflow-y-auto whitespace-pre-line">
+            <span className="flex-1 min-h-0 max-w-112.75 font-hanken font-medium text-[18px] text-[#393939] leading-7 pt-7.5 pb-10 my-2 overflow-y-auto whitespace-pre-line">
               {`During my final semester, I was working on a capstone project redesigning a local nonprofit's donation platform. I was really excited about conducting user research and planned to interview 15-20 donors to understand their motivations and pain points.
         The mistake I made was being overly optimistic about my timeline and access to participants. I had assumed the nonprofit would easil
         

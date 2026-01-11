@@ -3,7 +3,7 @@ import ArrowIcon from '../../../assets/icons/icon-arrow-forward.svg?react'
 
 const InterviewFooter = ({ isFinished, onFinish }) => {
 
-  // TODO finish interview button only and just scroll with anim trigger
+  // TODO: finish interview button only and just scroll with anim trigger
   const buttonLabel = !isFinished ? "Next" : "Finish Interview"
     // state === "ENDING"
     //   ? "Next"

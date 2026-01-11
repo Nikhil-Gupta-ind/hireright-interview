@@ -14,7 +14,7 @@ const CameraPreview = () => {
           alt="video preview"
           className='object-cover'
         />
-        {/* TODO controls not responsive with camera preview aspect ratio */}
+        {/* controls not responsive with camera preview aspect ratio */}
         {/* Controls */}
         {/* <div className='absolute bottom-6 right-6 flex gap-5'>
             <button className='w-14 h-14 rounded-full bg-[#5B3823] text-white text-xl items-center justify-center flex'>

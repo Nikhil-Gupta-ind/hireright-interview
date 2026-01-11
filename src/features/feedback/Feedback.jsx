@@ -7,6 +7,7 @@ const Feedback = () => {
 
   const [rating, setRating] = useState(0);
 
+  // TODO: Remove test
   useEffect(() => {
     if (rating === 5) {
       window.open('https://chatgpt.com', '_blank');

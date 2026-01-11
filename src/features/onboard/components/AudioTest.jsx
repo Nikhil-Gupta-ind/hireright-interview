@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import PlayIcon from "../../../assets/icons/icon-play.svg?react";
+import StopIcon from "../../../assets/icons/icon-stop.svg?react";
 
 const BAR_WIDTH = 12;
 const BAR_GAP = 4;
@@ -9,6 +10,8 @@ const AudioTest = ({ onTestClick, className = "" }) => {
   const [barCount, setBarCount] = useState(0);
   const [isTesting, setIsTesting] = useState(false);
   const [volume, setVolume] = useState(0);
+
+  const [hasTestedOnce, setHasTestedOnce] = useState(false);
 
   useEffect(() => {
     const updateBars = () => {
@@ -40,9 +43,11 @@ const AudioTest = ({ onTestClick, className = "" }) => {
 
   const handleTestClick = () => {
     setIsTesting(!isTesting);
+    setHasTestedOnce(true);
     if (onTestClick) onTestClick();
   };
 
+  // TODO: Need pause icon
   return (
     <div className={`flex flex-row gap-3 ${className}`}>
 
@@ -51,7 +56,7 @@ const AudioTest = ({ onTestClick, className = "" }) => {
         onClick={handleTestClick}
         className="flex gap-2.5 py-4 pl-4.5 pr-6 bg-[#E0E1F9] border border-[#3637A9] rounded-tl-[56px] rounded-bl-[56px] rounded-tr-[18px] rounded-br-[18px] items-center hover:brightness-95 shrink-0 min-w-28"
       >
-        <PlayIcon />
+        { isTesting ? <StopIcon /> : <PlayIcon />}
         <span className="text-[#3637A9] font-hanken text-[16px] font-medium leading-[22.4px]">
           {isTesting ? 'Stop' : 'Test'}
         </span>
@@ -74,9 +79,13 @@ const AudioTest = ({ onTestClick, className = "" }) => {
 
         {/* Status */}
         <div className="flex gap-2 ml-4 shrink-0">
-          <span className="w-5 h-5 bg-[#17A012] rounded-full"></span>
+          <span
+            className={`w-5 h-5 rounded-full ${
+              hasTestedOnce ? "bg-[#17A012]" : "bg-[#9CA3AF]" // gray-400
+            }`}
+          />
           <span className="font-hanken text-[16px] font-medium leading-[22.4px]">
-            Perfect
+            {hasTestedOnce ? "Perfect" : "Status"}
           </span>
         </div>
       </div>
@@ -103,7 +112,6 @@ export default AudioTest;
 
 //         {/* Audio Bars */}
 //         <div className="flex gap-1">
-//           {/* TODO count as per width */}
 //           {Array.from({ length: 19 }).map((_, i) => (
 //             <div
 //               key={i}

@@ -93,7 +93,6 @@ const EndingState = ({isComplete, className=''}) => {
           `}
         </span>
 
-        {/* TODO Show on click Next, scroll up, fade the text and move the agent below */}
         {true && <span className="font-hanken font-normal text-[20px] text-black leading-[138%] whitespace-pre-line">
           {`You'll receive detailed feedback from our team within 24 hours via email. This will include insights on your responses and information about the next steps in our process.`}
           {`

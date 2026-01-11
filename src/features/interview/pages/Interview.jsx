@@ -7,7 +7,7 @@ const Interview = ({onInterviewEnd}) => {
 
   const [state, setState] = useState("GREETING"); //GREETING, QUESTION, ENDING, COMPLETE
 
-  // todo need a data class alternative here rather than simple enum object
+  // TODO: need a data class alternative here rather than simple enum object
   const [isFinished, setFinished] = useState(false)
   const [isListening, setListening] = useState(false)
   const [count, setCount] = useState(1)
