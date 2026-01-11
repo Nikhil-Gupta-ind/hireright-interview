@@ -1,7 +1,6 @@
 import CompanionCard from '../../interview/components/card';
 
-const CompanionSelection = ({onSelect}) => {
-    const agents = apiResponse.data.availableAgents;
+const CompanionSelection = ({ onSelect, agents }) => {
 
   return (
     <div className="w-full min-h-screen bg-[#F8F2ED] flex flex-col items-center justify-center p-8 box-border">
@@ -14,9 +13,9 @@ const CompanionSelection = ({onSelect}) => {
             Select an AI interviewer that makes you feel most comfortable.
           </p>
         </header>
-        
+
         <div className="flex flex-wrap justify-center gap-20">
-          {agents.map((agent) => (
+          {agents && agents.map((agent) => (
             <CompanionCard key={agent.id} agent={agent} onSelect={onSelect} />
           ))}
         </div>
@@ -26,35 +25,3 @@ const CompanionSelection = ({onSelect}) => {
 }
 
 export default CompanionSelection
-
-// Mock API Data
-const apiResponse = {
-  "success": true,
-  "data": {
-    "title": "Backend Engineer Interview",
-    "type": "dsa",
-    "duration": 25,
-    "candidateName": "John Doe",
-    "status": "in_progress",
-    "availableAgents": [
-      {
-        "id": "jacob",
-        "name": "Jacob",
-        "avatar": "https://res.cloudinary.com/djy2jlthj/image/upload/v1765340966/peep-99.png",
-        "description": "Professional & direct, clear structured approach"
-      },
-      {
-        "id": "angela",
-        "name": "Angela",
-        "avatar": "https://res.cloudinary.com/djy2jlthj/image/upload/v1765340965/peep-11.png",
-        "description": "Warm & encouraging, friendly supportive style"
-      },
-      {
-        "id": "selena",
-        "name": "Selena",
-        "avatar": "https://res.cloudinary.com/djy2jlthj/image/upload/v1765340966/peep-23_1.png",
-        "description": "Tech savvy, relaxed conversational tone"
-      }
-    ]
-  }
-};

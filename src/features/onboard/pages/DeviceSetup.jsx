@@ -9,7 +9,11 @@ import Header from "../components/Header"
 import AudioTest from "../components/AudioTest"
 import BlutoothIcon from '../../../assets/icons/icon-bluetooth.svg?react'
 
-const DeviceSetup = ({onBack, onStartInterview}) => {
+import { startSession } from "../../../core/services/session"
+
+const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion }) => {
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const micOptions = [
     { icon: <MicIcon />, label: 'Microphone Array (Realtek(R) Audio)' },
@@ -18,15 +22,15 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
   ]
 
   const speakerOptions = [
-    {icon: <SpeakerIcon />, label: 'Speakers (Realtek(R) Audio)'},
-    {icon: <BlutoothIcon />, label: 'Default Speakers'},
-    {icon: <BlutoothIcon />, label: 'Headphones'}
+    { icon: <SpeakerIcon />, label: 'Speakers (Realtek(R) Audio)' },
+    { icon: <BlutoothIcon />, label: 'Default Speakers' },
+    { icon: <BlutoothIcon />, label: 'Headphones' }
   ]
 
   const camOptions = [
-    {icon: <CameraIcon />, label: 'USB 2.0 HD UVC Webcam'},
-    {icon: <CameraIcon />, label: 'Built-in Camera'},
-    {icon: <CameraIcon />, label: 'External Webcam'}
+    { icon: <CameraIcon />, label: 'USB 2.0 HD UVC Webcam' },
+    { icon: <CameraIcon />, label: 'Built-in Camera' },
+    { icon: <CameraIcon />, label: 'External Webcam' }
   ]
 
   const [mic, setMic] = useState(micOptions[0])
@@ -34,6 +38,24 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
   const [speaker, setSpeaker] = useState(speakerOptions[0])
 
   const [camera, setCamera] = useState(camOptions[0])
+
+  const handleStartInterview = async () => {
+    if (!sessionCode || !selectedCompanion) {
+      console.error("Missing session Code or selected companion");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await startSession(sessionCode, selectedCompanion.id);
+      onStartInterview();
+    } catch (error) {
+      console.error("Failed to start session:", error);
+      alert(error.message || "Failed to start session. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-(--color-bg) px-4 py-6 sm:p-8 lg:p-16 relative flex flex-col">
@@ -54,17 +76,17 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
               selectedOption={mic}
               options={micOptions}
               onOptionSelected={setMic}
-              // onOptionSelected={(uiOption) => {
-              //   setMic(uiOption)
+            // onOptionSelected={(uiOption) => {
+            //   setMic(uiOption)
 
-              //   const deviceToSelect = availableDevices.find(
-              //     d => d.name === uiOption.label
-              //   )
+            //   const deviceToSelect = availableDevices.find(
+            //     d => d.name === uiOption.label
+            //   )
 
-              //   if (deviceToSelect) {
-              //     audioHandler.selectDevice(deviceToSelect)
-              //   }
-              // }}
+            //   if (deviceToSelect) {
+            //     audioHandler.selectDevice(deviceToSelect)
+            //   }
+            // }}
             />
             <DeviceSelect
               selectedOption={speaker}
@@ -83,9 +105,11 @@ const DeviceSetup = ({onBack, onStartInterview}) => {
             />
 
             <button
-              onClick={onStartInterview}
-              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none">
-              Start Interview <ArrowIcon />
+              onClick={handleStartInterview}
+              disabled={isLoading}
+              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:opacity-50 disabled:cursor-not-allowed">
+              {isLoading ? "Starting..." : "Start Interview"}
+              {!isLoading && <ArrowIcon />}
             </button>
           </div>
         </div>

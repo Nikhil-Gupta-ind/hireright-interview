@@ -1,43 +1,51 @@
-import { Route, Routes } from 'react-router';
-import { useNavigate } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router';
 import Welcome from '../features/onboard/pages/Welcome';
 import CompanionSelection from '../features/onboard/pages/CompanionSelection';
 import DeviceSetup from '../features/onboard/pages/DeviceSetup';
 import Interview from '../features/interview/pages/Interview';
 import Feedback from '../features/feedback/Feedback';
 
-const AppRoutes = () => {
+const AppRoutes = ({ sessionData, setSessionData, setSelectedCompanion, selectedCompanion }) => {
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
   return (
     <Routes>
-      <Route path='/' element={
+      <Route path='/interview/:sessionCode' element={
         <Welcome
-          title='Product Design' 
-          onClick={() => {navigate('/companion')}}
+          title={sessionData?.title}
+          setSessionData={setSessionData}
+          onClick={() => { navigate('/companion') }}
         />}
       />
+
       <Route path='/companion' element={
-        <CompanionSelection 
-          onSelect={()=> { navigate('/setup') }}
+        <CompanionSelection
+          agents={sessionData?.availableAgents || []}
+          onSelect={(agent) => {
+            setSelectedCompanion(agent);
+            navigate('/setup');
+          }}
         />}
       />
       <Route path='/setup' element={
         <DeviceSetup
+          sessionCode={sessionData?.sessionCode}
+          selectedCompanion={selectedCompanion}
           onBack={() => navigate(-1)}
-          onStartInterview={() => 
+          onStartInterview={() =>
             navigate('/interview')
           }
         />}
       />
       <Route path='/interview' element={
-        <Interview 
-          onInterviewEnd={() => 
+        <Interview
+          sessionCode={sessionData?.sessionCode}
+          onInterviewEnd={() =>
             navigate("/feedback")
           }
-          />}
-       />
+        />}
+      />
       <Route path='/feedback' element={<Feedback />} />
     </Routes>
   )

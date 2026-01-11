@@ -6,7 +6,7 @@ import InterviewHeader from "./InterviewHeader";
 import InterviewProgress from "./InterviewProgress";
 import InterviewRight from "./InterviewRight";
 
-const InterviewBody = ({quesCount, isListening, isComplete, state, onImageClick }) => {
+const InterviewBody = ({ quesCount, isListening, state, onImageClick, sessionCode }) => {
 
   let [bool, setBool] = useState(false)
 
@@ -19,23 +19,23 @@ const InterviewBody = ({quesCount, isListening, isComplete, state, onImageClick 
         <InterviewHeader />
 
         <div className="flex-1 flex flex-col min-h-0">
-        {/* <div className="flex-1 flex flex-col justify-evenly"> */}
+          {/* <div className="flex-1 flex flex-col justify-evenly"> */}
 
           <div className="flex-1 min-h-0 flex">
 
             {state === "GREETING" && (
-              <GreetingState className="flex flex-1 min-h-0 items-center justify-center"/>
+              <GreetingState className="flex flex-1 min-h-0 items-center justify-center" />
             )}
 
             {state === "QUESTION" && (
-              <QuestionState 
-                isListening={isListening} 
-                className="flex flex-1 flex-col justify-center"/>
+              <QuestionState
+                isListening={isListening}
+                className="flex flex-1 flex-col justify-center" />
             )}
 
             {state === "ENDING" && (
               <EndingState
-                isComplete={isComplete}
+                sessionCode={sessionCode}
                 className="flex gap-8.75 flex-1 min-h-0 py-15"
               />
             )}
@@ -44,22 +44,22 @@ const InterviewBody = ({quesCount, isListening, isComplete, state, onImageClick 
 
           {/* Bottom Progress */}
           {state !== "ENDING" && (<InterviewProgress
-              agentName='Angela'
-              showAvatar={state === "QUESTION"}
-              agentSpeaking={!isListening}
-              quesNo={quesCount}
-              totalQues={3}
-              className='flex flex-col gap-4.75'
+            agentName='Angela'
+            showAvatar={state === "QUESTION"}
+            agentSpeaking={!isListening}
+            quesNo={quesCount}
+            totalQues={3}
+            className='flex flex-col gap-4.75'
           />)}
         </div>
       </div>
 
       {/* Right */}
       <InterviewRight
-      // showAnswerCard={bool}
-      // onImageClick={() => {
-      //   setBool(!bool)
-      // }}
+        // showAnswerCard={bool}
+        // onImageClick={() => {
+        //   setBool(!bool)
+        // }}
         showAnswerCard={state === "QUESTION"}
         showBlurBg={state !== "ENDING"}
         onImageClick={onImageClick}

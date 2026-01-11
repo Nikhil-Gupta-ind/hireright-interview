@@ -3,12 +3,11 @@ import InterviewBody from "../components/InterviewBody";
 import InterviewFooter from "../components/InterviewFooter";
 import HRGradient from "../components/Gradient";
 
-const Interview = ({onInterviewEnd}) => {
+const Interview = ({ onInterviewEnd, sessionCode }) => {
 
   const [state, setState] = useState("GREETING"); //GREETING, QUESTION, ENDING, COMPLETE
 
   // TODO: need a data class alternative here rather than simple enum object
-  const [isFinished, setFinished] = useState(false)
   const [isListening, setListening] = useState(false)
   const [count, setCount] = useState(1)
 
@@ -17,13 +16,13 @@ const Interview = ({onInterviewEnd}) => {
       {/* {state}
       {isFinished.toString()}
       {isListening.toString()} */}
-      
+
       <HRGradient />
       <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <InterviewBody
+          sessionCode={sessionCode}
           quesCount={count}
           isListening={isListening}
-          isComplete={isFinished}
           state={state}
           onImageClick={() => {
             if (state === "GREETING") setState("QUESTION");
@@ -42,10 +41,9 @@ const Interview = ({onInterviewEnd}) => {
           }}
         />
         {state === "ENDING" && <InterviewFooter
-          isFinished={isFinished}
           state={state}
           onFinish={() => {
-            !isFinished ? setFinished(true) : onInterviewEnd()
+            onInterviewEnd()
           }}
         />}
       </div>

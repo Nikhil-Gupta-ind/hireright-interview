@@ -1,15 +1,18 @@
-const CompanionCard = ({ agent: { avatar, name, description }, onSelect }) => {
+const CompanionCard = ({ agent, onSelect }) => {
+
+  const { avatar, name, description } = agent;
+  
   return (
     <div className="group perspective-1000">
-      <div 
+      <div
         style={{ width: '214px', height: '250px' }}
-        onClick={onSelect}
+        onClick={() => onSelect(agent)}
         // group-hover:shadow-2xl group-hover:z-10
         className="flex flex-col p-3 rounded-[20px] border border-[rgba(88,36,14,0.40)] bg-[#EFDFD3] transition-all duration-300 ease-out transform-gpu group-hover:transform-[rotate(-2deg)_scale(1.1)]"
       >
-        <img 
-          src={avatar} 
-          alt={name} 
+        <img
+          src={avatar}
+          alt={name}
           style={{ width: '190px', height: '144px' }}
           className="object-contain rounded-xl border border-[rgba(88,36,14,0.32)] bg-white"
           onError={(e) => { e.target.src = 'https://placehold.co/190x144?text=Agent'; }}

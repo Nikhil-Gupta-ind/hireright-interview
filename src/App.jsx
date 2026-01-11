@@ -1,16 +1,25 @@
 // import './App.css'
 import AppRoutes from './routes/AppRoutes';
 
-function App() {
+import { useState } from 'react';
 
-// TODO:
-// API
-// LiveKit
-// prevent back and mantain livekit session
-// save selected companion and session info
-// responsivness
+function App() {
+  const [sessionData, setSessionData] = useState(null);
+  const [selectedCompanion, setSelectedCompanion] = useState(null);
+
+  // TODO:
+  // API
+  // LiveKit
+  // prevent back and mantain livekit session
+  // save selected companion and session info
+  // responsivness
   return (
-    <AppRoutes />
+    <AppRoutes
+      sessionData={sessionData}
+      setSessionData={setSessionData}
+      selectedCompanion={selectedCompanion}
+      setSelectedCompanion={setSelectedCompanion}
+    />
   );
 }
 
