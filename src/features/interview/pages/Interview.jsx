@@ -1,7 +1,7 @@
 import { useState } from "react";
 import InterviewBody from "../components/InterviewBody";
 import InterviewFooter from "../components/InterviewFooter";
-import HRGradient from "../components/Gradient";
+import HRGradient from "../components/gradient";
 
 const Interview = ({ onInterviewEnd, sessionCode }) => {
 

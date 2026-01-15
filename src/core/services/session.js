@@ -1,5 +1,7 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const fetchSessionDetails = async (sessionCode) => {
-    const response = await fetch(`https://api.hire-right.ai/api/v1/sessions/${sessionCode}/details`, {
+    const response = await fetch(`${API_BASE_URL}/sessions/${sessionCode}/details`, {
         headers: {
             'accept': 'application/json'
         }
@@ -15,7 +17,7 @@ export const fetchSessionDetails = async (sessionCode) => {
 };
 
 export const startSession = async (sessionCode, agentId) => {
-    const response = await fetch(`https://api.hire-right.ai/api/v1/sessions/${sessionCode}/start`, {
+    const response = await fetch(`${API_BASE_URL}/sessions/${sessionCode}/start`, {
         method: 'POST',
         headers: {
             'accept': 'application/json',
@@ -35,8 +37,8 @@ export const startSession = async (sessionCode, agentId) => {
     return data.data; // Returning data just in case, even if not used immediately.
 };
 
-export const fetchSessionSummary = async (sessionCode) => {
-    const response = await fetch(`https://api.hire-right.ai/api/v1/sessions/T9SZYEIQ/detail`, {
+export const fetchSessionSummary = async (sessionCode) => { // T9SZYEIQ
+    const response = await fetch(`${API_BASE_URL}/sessions/${sessionCode}/detail`, {
         headers: {
             'accept': 'application/json'
         }
