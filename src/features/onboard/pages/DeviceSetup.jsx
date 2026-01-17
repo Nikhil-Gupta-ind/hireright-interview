@@ -222,18 +222,22 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
                   onOptionSelected={async (opt) => {
                     setMic(opt);
 
-                    // stop old track
+                    // stop and remove old audio track
                     if (localAudioTrack) {
                       localAudioTrack.stop();
+                      tracksRef.current = tracksRef.current.filter(
+                        t => t.kind !== 'audio'
+                      );
                     }
 
-                    // create NEW track with explicit device
-                    const tracks = await createLocalTracks({
+                    // create new audio track
+                    const [newAudioTrack] = await createLocalTracks({
                       audio: { deviceId: { exact: opt.deviceId } },
                       video: false,
                     });
 
-                    const newAudioTrack = tracks[0];
+                    // track it for cleanup
+                    tracksRef.current.push(newAudioTrack);
 
                     setLocalAudioTrack(newAudioTrack);
                     setAudioTrackVersion(v => v + 1);
