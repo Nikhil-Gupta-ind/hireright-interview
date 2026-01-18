@@ -11,6 +11,12 @@ const DeviceSelect = ({
   const containerRef = useRef(null)
 
   useEffect(() => {
+    if (options.length === 1) {
+      setIsOpen(false)
+    }
+  }, [options])
+
+  useEffect(() => {
     if (!isOpen) return
 
     const handlePointerDown = (event) => {

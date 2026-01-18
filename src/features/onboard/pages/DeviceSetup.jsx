@@ -11,7 +11,7 @@ import AudioTest from "../components/AudioTest"
 import { getAudioDeviceIcon, getMicDeviceIcon } from "../utils/deviceIcons"
 import { startSession } from "../../../core/services/session"
 
-const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion }) => {
+const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion, selectedDevices, setSelectedDevices }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [localVideoTrack, setLocalVideoTrack] = useState(null);
@@ -20,19 +20,9 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [audioTrackVersion, setAudioTrackVersion] = useState(0);
 
-  const [micOptions, setMicOptions] = useState([
-    { icon: <MicIcon />, label: 'Default Microphone' },
-  ]);
-  const [speakerOptions, setSpeakerOptions] = useState([
-    { icon: <SpeakerIcon />, label: 'Default Speakers' },
-  ]);
-  const [camOptions, setCamOptions] = useState([
-    { icon: <CameraIcon />, label: 'Default Camera' },
-  ]);
-
-  const [mic, setMic] = useState(micOptions[0]);
-  const [speaker, setSpeaker] = useState(speakerOptions[0]);
-  const [camera, setCamera] = useState(camOptions[0]);
+  const [micOptions, setMicOptions] = useState([selectedDevices.mic]);
+  const [speakerOptions, setSpeakerOptions] = useState([selectedDevices.speaker]);
+  const [camOptions, setCamOptions] = useState([selectedDevices.camera]);
 
   const tracksRef = useRef([]);
 
@@ -64,18 +54,18 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
         // Only update selected if it's not set or doesn't exist anymore
         // Logic: if current mic is in the new list, keep it. Else set to first.
         if (micOpts.length > 0) {
-          const currentStillExists = mic && micOpts.find(m => m.deviceId === mic.deviceId);
-          if (!currentStillExists) setMic(micOpts[0]);
+          const currentStillExists = selectedDevices.mic && micOpts.find(m => m.deviceId === selectedDevices.mic.deviceId);
+          if (!currentStillExists) setSelectedDevices(prev => ({ ...prev, mic: micOpts[0] }));
         }
 
         if (speakerOpts.length > 0) {
-          const currentStillExists = speaker && speakerOpts.find(s => s.deviceId === speaker.deviceId);
-          if (!currentStillExists) setSpeaker(speakerOpts[0]);
+          const currentStillExists = selectedDevices.speaker && speakerOpts.find(s => s.deviceId === selectedDevices.speaker.deviceId);
+          if (!currentStillExists) setSelectedDevices(prev => ({ ...prev, speaker: speakerOpts[0] }));
         }
 
         if (camOpts.length > 0) {
-          const currentStillExists = camera && camOpts.find(c => c.deviceId === camera.deviceId);
-          if (!currentStillExists) setCamera(camOpts[0]);
+          const currentStillExists = selectedDevices.camera && camOpts.find(c => c.deviceId === selectedDevices.camera.deviceId);
+          if (!currentStillExists) setSelectedDevices(prev => ({ ...prev, camera: camOpts[0] }));
         }
       }
     } catch (error) {
@@ -91,8 +81,8 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
       //   video: true,
       // });
       const tracks = await createLocalTracks({
-        audio: mic?.deviceId
-          ? { deviceId: { exact: mic.deviceId } }
+        audio: setSelectedDevices.mic?.deviceId
+          ? { deviceId: { exact: setSelectedDevices.mic.deviceId } }
           : true,
         video: true,
       });
@@ -215,12 +205,15 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
                   Permission needed
                 </div>
               )}
-              {mic && (
+              {selectedDevices.mic && (
                 <DeviceSelect
-                  selectedOption={mic}
+                  selectedOption={selectedDevices.mic}
                   options={micOptions}
                   onOptionSelected={async (opt) => {
-                    setMic(opt);
+                    setSelectedDevices(prev => ({
+                      ...prev,
+                      mic: opt
+                    }));
 
                     // stop and remove old audio track
                     if (localAudioTrack) {
@@ -253,13 +246,16 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
               )}
             </div>
 
-            {speaker && (
+            {selectedDevices.speaker && (
               <DeviceSelect
-                selectedOption={speaker}
+                selectedOption={selectedDevices.speaker}
                 options={speakerOptions}
                 className='mt-4.5'
                 onOptionSelected={(opt) => {
-                  setSpeaker(opt);
+                  setSelectedDevices(prev => ({
+                    ...prev,
+                    speaker: opt
+                  }));
                 }}
               />
             )}
@@ -268,16 +264,20 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion 
               className='mt-4.5 select-none'
               track={localAudioTrack}
               trackVersion={audioTrackVersion}
-              speakerDeviceId={speaker?.deviceId}
+              speakerDeviceId={selectedDevices.speaker?.deviceId}
             />
 
-            {camera && (
+            {selectedDevices.camera && (
               <DeviceSelect
-                selectedOption={camera}
+                selectedOption={selectedDevices.camera}
                 options={camOptions}
                 className='mt-6.5'
                 onOptionSelected={async (opt) => {
-                  setCamera(opt);
+                  setSelectedDevices(prev => ({
+                    ...prev,
+                    camera: opt
+                  }));
+
                   if (localVideoTrack) {
                     try {
                       await localVideoTrack.restartTrack({ deviceId: opt.deviceId });
