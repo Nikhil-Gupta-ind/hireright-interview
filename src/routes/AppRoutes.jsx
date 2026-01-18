@@ -8,6 +8,7 @@ import Feedback from '../features/feedback/Feedback';
 import MicIcon from '../assets/icons/icon-mic.svg?react'
 import CameraIcon from '../assets/icons/icon-camera.svg?react'
 import SpeakerIcon from '../assets/icons/icon-speaker.svg?react'
+import NotFound from '../features/common/pages/NotFound';
 
 const AppRoutes = ({ sessionData, setSessionData, setSelectedCompanion, selectedCompanion }) => {
 
@@ -59,6 +60,7 @@ const AppRoutes = ({ sessionData, setSessionData, setSelectedCompanion, selected
         />}
       />
       <Route path='/feedback' element={<Feedback />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   )
 }
