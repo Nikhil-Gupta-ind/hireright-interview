@@ -8,11 +8,11 @@ const Feedback = () => {
   const [rating, setRating] = useState(0);
 
   // TODO: Remove test
-  useEffect(() => {
-    if (rating === 5) {
-      window.open('https://chatgpt.com', '_blank');
-    }
-  }, [rating]);
+  // useEffect(() => {
+  //   if (rating === 5) {
+  //     window.open('https://chatgpt.com', '_blank');
+  //   }
+  // }, [rating]);
 
   return (
     <div className='h-screen w-full bg-(--color-bg) flex flex-col items-center justify-evenly p-18'>

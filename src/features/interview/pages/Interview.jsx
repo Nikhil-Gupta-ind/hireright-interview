@@ -1,47 +1,84 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParticipants, useLocalParticipant, useRoomContext } from "@livekit/components-react";
 import InterviewBody from "../components/InterviewBody";
 import InterviewFooter from "../components/InterviewFooter";
 import HRGradient from "../components/gradient";
+import { useInterviewState } from "../hooks/useInterviewState";
+import { INTERVIEW_STATES } from "../constants/interviewStates";
 
-const Interview = ({ onInterviewEnd, sessionCode }) => {
+const Interview = ({
+  onInterviewEnd,
+  sessionCode,
+  sessionData,
+  selectedCompanion
+}) => {
 
-  const [state, setState] = useState("GREETING"); //GREETING, QUESTION, ENDING, COMPLETE
+  const {
+    currentState,
+    currentQuestion,
+    currentMessage,
+    questionIndex,
+    totalQuestions
+  } = useInterviewState();
 
-  // TODO: need a data class alternative here rather than simple enum object
-  const [isListening, setListening] = useState(false)
-  const [count, setCount] = useState(1)
+  const { room, state: connectionState } = useRoomContext();
+  const participants = useParticipants();
+  const localParticipant = useLocalParticipant();
+
+  const [questionOver, setQuestionOver] = useState(false) // all questions completed but interview is not ended
+
+  useEffect(() => {
+    if (currentState === INTERVIEW_STATES.ENDING) {
+      setQuestionOver(true)
+    }
+  }, [currentState])
+
+  useEffect(() => {
+    console.log("Local Participant:", localParticipant);
+  }, [localParticipant]);
+
+  useEffect(() => {
+    console.log("Participants:", participants);
+    console.log("Total Participants:", participants.length);
+    console.log("Remote Participants:", participants.filter(p => !p.isLocal));
+  }, [participants]);
+
+  useEffect(() => {
+    if (connectionState === 'connected') {
+      console.log("Connected to LiveKit Room. Room Info:", room);
+      console.log("Local Mic Enabled:", localParticipant.isMicrophoneEnabled);
+      console.log("Local Audio Tracks:", localParticipant.audioTrackPublications);
+    }
+  }, [connectionState, localParticipant, room]);
+
+  // useEffect(() => {
+  //   if (isEnding) {
+  //     console.log("[Interview] State is ending, navigating...");
+  //     onInterviewEnd();
+  //   }
+  // }, [isEnding]);
+
+  useEffect(() => {
+    console.log("[Interview] Current State:", currentState);
+  }, [currentState]);
 
   return (
-    <div className={`h-screen ${state === "COMPLETE" ? "bg-(--color-bg)" : "bg-[#FEFEFE]"} p-8 sm:p-12 lg:p-18 relative flex flex-col overflow-clip`}>
-      {/* {state}
-      {isFinished.toString()}
-      {isListening.toString()} */}
+    <div className={`h-screen ${currentState === INTERVIEW_STATES.COMPLETE ? "bg-(--color-bg)" : "bg-[#FEFEFE]"} p-8 sm:p-12 lg:p-18 relative flex flex-col overflow-clip`}>
 
       <HRGradient />
       <div className="relative z-10 flex flex-col flex-1 min-h-0">
         <InterviewBody
           sessionCode={sessionCode}
-          quesCount={count}
-          isListening={isListening}
-          state={state}
-          onImageClick={() => {
-            if (state === "GREETING") setState("QUESTION");
-            else if (state === "QUESTION") {
-              if (isListening) {
-                if (count < 3) {
-                  setCount(count + 1)
-                  setListening(false)
-                } else {
-                  setState("ENDING")
-                }
-              } else {
-                setListening(true)
-              }
-            }
-          }}
+          sessionData={sessionData}
+          selectedCompanion={selectedCompanion}
+          quesNum={questionIndex}
+          totalQuestions={totalQuestions}
+          currentQuestion={currentQuestion}
+          currentMessage={currentMessage}
+          state={currentState}
+          questionOver={questionOver}
         />
-        {state === "ENDING" && <InterviewFooter
-          state={state}
+        {questionOver && <InterviewFooter
           onFinish={() => {
             onInterviewEnd()
           }}

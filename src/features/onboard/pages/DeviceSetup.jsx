@@ -2,13 +2,12 @@ import { useState, useEffect, useRef } from "react"
 import { createLocalTracks, Room } from "livekit-client"
 import CameraPreview from "../components/CameraPreview"
 import DeviceSelect from "../components/DeviceSelect"
-import MicIcon from "../../../assets/icons/icon-mic.svg?react"
-import SpeakerIcon from "../../../assets/icons/icon-speaker.svg?react"
 import CameraIcon from '../../../assets/icons/icon-camera.svg?react'
 import ArrowIcon from "../../../assets/icons/icon-arrow-forward.svg?react"
 import Header from "../components/Header"
 import AudioTest from "../components/AudioTest"
 import { getAudioDeviceIcon, getMicDeviceIcon } from "../utils/deviceIcons"
+import DotsFlashing from "../components/DotsFlashing"
 import { startSession } from "../../../core/services/session"
 
 const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion, selectedDevices, setSelectedDevices }) => {
@@ -290,9 +289,13 @@ const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion,
             <button
               onClick={handleStartInterview}
               disabled={isLoading || !permissionGranted}
-              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:opacity-50 disabled:cursor-not-allowed">
-              {isLoading ? "Starting..." : "Start Interview"}
-              {!isLoading && <ArrowIcon />}
+              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:cursor-not-allowed min-w-[185px] justify-center">
+              {isLoading ? <DotsFlashing /> : (
+                <>
+                  Start Interview
+                  <ArrowIcon />
+                </>
+              )}
             </button>
           </div>
         </div>

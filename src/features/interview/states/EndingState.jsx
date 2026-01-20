@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { fetchSessionSummary } from "../../../core/services/session";
+import Avatar from "../components/Avatar";
 
-const EndingState = ({ className = '', sessionCode }) => {
+const EndingState = ({
+  companion,
+  className = '',
+  sessionCode
+}) => {
 
   const scrollRef = useRef(null)
+  const isSummaryEnabled = true
   const [summary, setSummary] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    setLoading(true)
 
     const loadSummary = async () => {
       try {
@@ -27,14 +34,14 @@ const EndingState = ({ className = '', sessionCode }) => {
     };
 
     const timer = setTimeout(() => {
-      if (sessionCode) {
+      if (sessionCode && isSummaryEnabled) {
         loadSummary();
       } else {
         // Fallback if no sessionCode, though shouldn't happen in normal flow
         setError("Oops your interview summary is unavailable at the moment!");
         setLoading(false);
       }
-    }, 10000); // 10 seconds delay
+    }, 18000); // 18 seconds delay
 
     return () => clearTimeout(timer);
   }, [sessionCode]);
@@ -59,25 +66,33 @@ const EndingState = ({ className = '', sessionCode }) => {
   return (
     <div className={`${className} relative`}>
       <div className="relative w-32 shrink-0 mr-8 hidden md:block select-none">
-        <img
-          src={'https://res.cloudinary.com/djy2jlthj/image/upload/v1765340965/peep-11.png'}
-          alt="Agent Avatar"
+        <Avatar
+          companion={companion}
+          size="128px"
+          className={`
+            shadow-sm absolute left-0 transition-all duration-1000 ease-in-out
+            ${(!loading && isSummaryEnabled) ? 'top-1/2 -translate-y-1/2' : 'top-0 translate-y-0'}`}
+        />
+        {/* <img
+          src={companion?.avatar}
+          alt={companion?.name}
           className={`
             w-32 h-32 object-contain rounded-full bg-[#D5621B66] shadow-sm
             absolute left-0
             transition-all duration-1000 ease-in-out
-            ${!loading ? 'top-1/2 -translate-y-1/2' : 'top-0 translate-y-0'}
+            ${(!loading && isSummaryEnabled) ? 'top-1/2 -translate-y-1/2' : 'top-0 translate-y-0'}
           `}
           onError={(e) => { e.target.src = 'https://placehold.co/190x144?text=Agent'; }}
-        />
+        /> */}
       </div>
       {/* MOBILE FALLBACK (Static Header for small screens) */}
       <div className="md:hidden mb-6 flex justify-center w-full">
-        <img
-          src={'https://res.cloudinary.com/djy2jlthj/image/upload/v1765340965/peep-11.png'}
-          alt="Agent Avatar"
+        <Avatar companion={companion} size="96px" />
+        {/* <img
+          src={companion?.avatar}
+          alt={companion?.name}
           className="w-24 h-24 object-contain rounded-full bg-[#D5621B66]"
-        />
+        /> */}
       </div>
 
       {/* Scrollable Content */}
@@ -88,12 +103,12 @@ const EndingState = ({ className = '', sessionCode }) => {
           </p>
         </div>}
 
-        <p className="font-hanken font-normal text-[20px] text-black leading-[138%] whitespace-pre-line m-0 mt-6">
+        {isSummaryEnabled && <p className="font-hanken font-normal text-[20px] text-black leading-[138%] whitespace-pre-line m-0 mt-6">
           Here are some insights from our Chat!
-        </p>
+        </p>}
 
         {/* Interview Summary with Loading State */}
-        <div className="relative min-h-[100px] mt-4">
+        {isSummaryEnabled && <div className="relative min-h-[100px] mt-4">
           {loading ? (
             <div className="w-full animate-pulse space-y-4">
               <div className="h-5 bg-[rgba(88,36,14,0.1)] rounded w-3/4"></div>
@@ -114,11 +129,11 @@ const EndingState = ({ className = '', sessionCode }) => {
               {summary}
             </div>
           )}
-        </div>
+        </div>}
 
-        <p className="mt-10 font-dm-serif font-normal text-[32px] text-[#58240E] leading-[40.96px] italic whitespace-pre-line">
+        {isSummaryEnabled && <p className="mt-10 font-dm-serif font-normal text-[32px] text-[#58240E] leading-[40.96px] italic whitespace-pre-line">
           Here’s what happens next...
-        </p>
+        </p>}
 
         {!loading && <p className="font-hanken font-normal text-[20px] text-black leading-[138%] whitespace-pre-line m-0 mt-10 mb-10">
           You'll receive detailed feedback from our team within 24 hours via email. This will include insights on your responses and information about the next steps in our process.

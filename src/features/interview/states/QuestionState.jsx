@@ -1,38 +1,32 @@
-const QuestionState = ({ isListening, className = '' }) => {
+import { useRemoteParticipants, useTranscriptions } from "@livekit/components-react";
+import { useMemo, useRef, useEffect } from "react";
+
+const QuestionState = ({ isListening, currentQuestion, className = '' }) => {
+  const remoteParticipants = useRemoteParticipants();
+  const agentParticipant = remoteParticipants[0];
+  const transcriptionOptions = useMemo(() => ({
+    participantIdentities: agentParticipant ? [agentParticipant.identity] : []
+  }), [agentParticipant]);
+  const segments = useTranscriptions(transcriptionOptions);
+
+  const transcriptRef = useRef(null);
+
+  useEffect(() => {
+    if (transcriptRef.current) {
+      transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
+    }
+  }, [segments]);
+
   return (
     <div className={`${className}`}>
       {/* Centered interview block */}
       <div className="flex flex-col w-full max-h-full py-15">
-        
+
         {/* Answer / Live transcription (scrollable) */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div ref={transcriptRef} className="flex-1 min-h-0 overflow-y-auto">
           {isListening && (
-            <span className="block font-hanken text-[#393939CC] text-[20px] font-medium leading-7">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi quidem
-              iusto non facere distinctio! Aliquid, cumque, fugiat iste maxime
-              ipsam fugit perspiciatis voluptate expedita beatae ut quisquam
-              molestias, obcaecati eos?
-              <br /><br />
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sed
-              nobis minima quae debitis eos amet dolor voluptate.
-
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi quidem
-              iusto non facere distinctio! Aliquid, cumque, fugiat iste maxime
-              ipsam fugit perspiciatis voluptate expedita beatae ut quisquam
-              molestias, obcaecati eos?
-              <br /><br />
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sed
-              nobis minima quae debitis eos amet dolor voluptate.
-
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Modi quidem
-              iusto non facere distinctio! Aliquid, cumque, fugiat iste maxime
-              ipsam fugit perspiciatis voluptate expedita beatae ut quisquam
-              molestias, obcaecati eos?
-              <br /><br />
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi sed
-              nobis minima quae debitis eos amet dolor voluptate.
-
-              
+            <span className="block font-hanken text-[#393939CC] text-[20px] font-medium leading-7 whitespace-pre-line">
+              {segments?.map(s => s.text).join(' ') || (isListening ? 'Agent is listening...' : '')}
             </span>
           )}
         </div>
@@ -45,8 +39,7 @@ const QuestionState = ({ isListening, className = '' }) => {
 
           {/* Question text with line clamp */}
           <span className="block font-hanken text-black text-[32px] leading-[40.96px] mt-5.5 line-clamp-3">
-            Tell me about a time you made a mistake. How did you communicate that
-            mistake?
+            {currentQuestion}
           </span>
         </div>
       </div>

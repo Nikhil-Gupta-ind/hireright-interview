@@ -1,14 +1,25 @@
-import { useState } from "react";
 import EndingState from "../states/EndingState";
 import GreetingState from "../states/GreetingState";
 import QuestionState from "../states/QuestionState";
 import InterviewHeader from "./InterviewHeader";
 import InterviewProgress from "./InterviewProgress";
 import InterviewRight from "./InterviewRight";
+import { INTERVIEW_STATES } from "../constants/interviewStates";
 
-const InterviewBody = ({ quesCount, isListening, state, onImageClick, sessionCode }) => {
+const InterviewBody = ({
+  sessionCode,
+  sessionData,
+  selectedCompanion,
+  quesNum,
+  totalQuestions,
+  currentQuestion,
+  currentMessage,
+  state,
+  questionOver,
+  onImageClick
+}) => {
 
-  let [bool, setBool] = useState(false)
+  const isListening = state === INTERVIEW_STATES.LISTENING
 
   return (
     // <div className="w-full flex-1 flex items-stretch justify-between gap-0 flex-col lg:flex-row">
@@ -23,32 +34,43 @@ const InterviewBody = ({ quesCount, isListening, state, onImageClick, sessionCod
 
           <div className="flex-1 min-h-0 flex">
 
-            {state === "GREETING" && (
-              <GreetingState className="flex flex-1 min-h-0 items-center justify-center" />
-            )}
-
-            {state === "QUESTION" && (
-              <QuestionState
-                isListening={isListening}
-                className="flex flex-1 flex-col justify-center" />
-            )}
-
-            {state === "ENDING" && (
-              <EndingState
-                sessionCode={sessionCode}
-                className="flex gap-8.75 flex-1 min-h-0 py-15"
+            {state === INTERVIEW_STATES.GREETING && (
+              <GreetingState
+                companion={selectedCompanion}
+                currentMessage={currentMessage}
+                className="flex flex-1 min-h-0 items-center justify-center"
               />
             )}
+
+            {/* Show question until interivew has ended */}
+            {(state === INTERVIEW_STATES.QUESTION || (isListening && !questionOver)) && (
+              <QuestionState
+                isListening={isListening}
+                currentQuestion={currentQuestion}
+                className="flex flex-1 flex-col justify-center"
+              />
+            )}
+
+            {
+              // (state === INTERVIEW_STATES.ENDING || state === INTERVIEW_STATES.COMPLETE) 
+              questionOver
+              && (
+                <EndingState
+                  sessionCode={sessionCode}
+                  companion={selectedCompanion}
+                  className="flex gap-8.75 flex-1 min-h-0 py-15"
+                />
+              )}
 
           </div>
 
           {/* Bottom Progress */}
-          {state !== "ENDING" && (<InterviewProgress
-            agentName='Angela'
-            showAvatar={state === "QUESTION"}
-            agentSpeaking={!isListening}
-            quesNo={quesCount}
-            totalQues={3}
+          {(!questionOver) && (<InterviewProgress
+            companion={selectedCompanion}
+            showAvatar={state == INTERVIEW_STATES.QUESTION || isListening}
+            companionSpeaking={!isListening}
+            quesNum={quesNum}
+            totalQues={totalQuestions}
             className='flex flex-col gap-4.75'
           />)}
         </div>
@@ -60,8 +82,10 @@ const InterviewBody = ({ quesCount, isListening, state, onImageClick, sessionCod
         // onImageClick={() => {
         //   setBool(!bool)
         // }}
-        showAnswerCard={state === "QUESTION"}
-        showBlurBg={state !== "ENDING"}
+        duration={sessionData?.duration}
+        quesNum={quesNum}
+        showAnswerCard={(isListening && !questionOver)}
+        showBlurBg={state !== INTERVIEW_STATES.ENDING && state !== INTERVIEW_STATES.COMPLETE}
         onImageClick={onImageClick}
       />
     </div>
