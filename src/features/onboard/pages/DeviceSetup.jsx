@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { createLocalTracks, Room } from "livekit-client"
+import { useNavigate } from "react-router"
+import { useSessionContext } from "../../../context/SessionContext"
 import CameraPreview from "../components/CameraPreview"
 import DeviceSelect from "../components/DeviceSelect"
 import CameraIcon from '../../../assets/icons/icon-camera.svg?react'
@@ -10,7 +12,13 @@ import { getAudioDeviceIcon, getMicDeviceIcon } from "../utils/deviceIcons"
 import DotsFlashing from "../components/DotsFlashing"
 import { startSession } from "../../../core/services/session"
 
-const DeviceSetup = ({ onBack, onStartInterview, sessionCode, selectedCompanion, selectedDevices, setSelectedDevices }) => {
+const DeviceSetup = () => {
+  const navigate = useNavigate();
+  const { sessionData, selectedCompanion, selectedDevices, setSelectedDevices } = useSessionContext();
+  const sessionCode = sessionData?.sessionCode;
+
+  const onBack = () => navigate(-1);
+  const onStartInterview = () => navigate('/interview');
 
   const [isLoading, setIsLoading] = useState(false);
   const [localVideoTrack, setLocalVideoTrack] = useState(null);

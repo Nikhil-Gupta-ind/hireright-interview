@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { useParticipants, useLocalParticipant, useRoomContext } from "@livekit/components-react";
+import { useSessionContext } from "../../../context/SessionContext";
 import InterviewBody from "../components/InterviewBody";
 import InterviewFooter from "../components/InterviewFooter";
 import HRGradient from "../components/gradient";
 import { useInterviewState } from "../hooks/useInterviewState";
 import { INTERVIEW_STATES } from "../constants/interviewStates";
 
-const Interview = ({
-  onInterviewEnd,
-  sessionCode,
-  sessionData,
-  selectedCompanion
-}) => {
+const Interview = () => {
+  const navigate = useNavigate();
+  const { sessionData, selectedCompanion, setSessionData } = useSessionContext();
+  const sessionCode = sessionData?.sessionCode;
+
+  const onInterviewEnd = () => {
+    setSessionData(null); // FIXME: is this needed? on navigating to feedback it goes to 404 check
+    navigate("/feedback", { replace: true })
+  };
 
   const {
     currentState,

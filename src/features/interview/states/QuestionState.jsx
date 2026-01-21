@@ -1,5 +1,6 @@
 import { useRemoteParticipants, useTranscriptions } from "@livekit/components-react";
 import { useMemo, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion"
 
 const QuestionState = ({ isListening, currentQuestion, className = '' }) => {
   const remoteParticipants = useRemoteParticipants();
@@ -23,13 +24,13 @@ const QuestionState = ({ isListening, currentQuestion, className = '' }) => {
       <div className="flex flex-col w-full max-h-full py-15">
 
         {/* Answer / Live transcription (scrollable) */}
-        <div ref={transcriptRef} className="flex-1 min-h-0 overflow-y-auto">
-          {isListening && (
+        {isListening && (
+          <div ref={transcriptRef} className="flex-1 min-h-0 overflow-y-auto">
             <span className="block font-hanken text-[#393939CC] text-[20px] font-medium leading-7 whitespace-pre-line">
-              {segments?.map(s => s.text).join(' ') || (isListening ? 'Agent is listening...' : '')}
+              {segments?.map(s => s.text).join(' ') || (isListening ? '...' : '')}
             </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Anchored question */}
         <div className="mt-8 shrink-0">

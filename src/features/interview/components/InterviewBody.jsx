@@ -85,7 +85,7 @@ const InterviewBody = ({
         duration={sessionData?.duration}
         quesNum={quesNum}
         showAnswerCard={(isListening && !questionOver)}
-        showBlurBg={state !== INTERVIEW_STATES.ENDING && state !== INTERVIEW_STATES.COMPLETE}
+        showBlurBg={!questionOver}
         onImageClick={onImageClick}
       />
     </div>

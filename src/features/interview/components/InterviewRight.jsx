@@ -1,5 +1,4 @@
-import { motion } from "framer-motion"
-import sample from '../../../assets/sample-video-call.png'
+import { motion, AnimatePresence } from "framer-motion"
 import { VideoTrack, useTracks, useLocalParticipant, useTranscriptions } from "@livekit/components-react";
 import { Track } from "livekit-client";
 import ClockIcon from '../../../assets/icons/icon-clock.svg?react'
@@ -29,7 +28,7 @@ const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImage
 
   // Filter segments to only show those from the current question
   const [startIndex, setStartIndex] = useState(0);
-  
+
   useEffect(() => {
     // When question number changes, update the start index to the current length
     if (segments) {
@@ -74,6 +73,7 @@ const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImage
       {/* Card */}
       <motion.div
         layout
+        transition={{ duration: 0.5, ease: "easeInOut" }}
         // transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className={`flex flex-col w-full rounded-3xl bg-[#FAFAFA] shadow
         ${showAnswerCard ? 'flex-1 min-h-0 overflow-hidden' : 'h-auto'}`}
@@ -94,7 +94,7 @@ const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImage
               </button>
             </div>
 
-            <span 
+            <span
               ref={transcriptRef}
               className="flex-1 min-h-0 max-w-112.75 font-hanken font-medium text-[18px] text-[#393939] leading-7 pt-7.5 pb-10 my-2 overflow-y-auto whitespace-pre-line"
             >
@@ -114,26 +114,29 @@ const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImage
 
         {/* Camera Preview */}
         <motion.div layout className="relative w-full select-none">
-          {showBlurBg && (
-            <motion.img
-              src={showAnswerCard ? fcamBlur2 : fcamBlur}
-              alt=""
-              aria-hidden
-              initial={false}
-              animate={{
-                y: showAnswerCard ? -24 : 24,
-                opacity: showAnswerCard ? 1 : 0.85
-              }}
-              transition={{
-                duration: 0.35,
-                ease: "easeInOut"
-              }}
-              className="
-                absolute inset-0 object-cover rounded-3xl
-                pointer-events-none
-              "
-            />
-          )}
+          <AnimatePresence>
+            {showBlurBg && (
+              <motion.img
+                src={showAnswerCard ? fcamBlur2 : fcamBlur}
+                alt=""
+                aria-hidden
+                initial={{ opacity: 0 }}
+                animate={{
+                  y: showAnswerCard ? -24 : 24,
+                  opacity: showAnswerCard ? 1 : 0.85
+                }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  duration: 0.35,
+                  ease: "easeInOut"
+                }}
+                className="
+                  absolute inset-0 object-cover rounded-3xl
+                  pointer-events-none
+                "
+              />
+            )}
+          </AnimatePresence>
 
           <div className='h-96.5 w-full rounded-3xl overflow-hidden relative z-10 cursor-pointer'>
             {localCameraTrackRef ? (
@@ -141,7 +144,7 @@ const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImage
                 trackRef={localCameraTrackRef}
                 // style={{ aspectRatio: '515/386' }}
                 style={{ aspectRatio: '515/386', transform: 'scale(-1, 1)' }} // Mirror local video
-                className='w-full h-full object-cover'
+                className='w-full h-full object-cover drop-shadow-2xl'
                 onClick={onImageClick}
               />
             ) : (
@@ -152,14 +155,6 @@ const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImage
               />
             )}
           </div>
-
-          {/* <img
-            src={sample}
-            style={{ aspectRatio: '515/386' }}
-            alt="video preview"
-            className='relative z-10 w-full h-full object-cover cursor-pointer'
-            onClick={onImageClick}
-          /> */}
 
           {/* {showBlurBg && (
             <div className="z-10 rounded-3xl absolute inset-0 flex items-center justify-center bg-[#00000035] text-white text-lg font-semibold pointer-events-none">

@@ -1,6 +1,16 @@
+import { useNavigate } from 'react-router';
+import { useSessionContext } from '../../../context/SessionContext';
 import CompanionCard from '../../interview/components/card';
 
-const CompanionSelection = ({ onSelect, agents }) => {
+const CompanionSelection = () => {
+  const navigate = useNavigate();
+  const { sessionData, setSelectedCompanion } = useSessionContext();
+  const agents = sessionData?.availableAgents || [];
+
+  const handleSelect = (agent) => {
+    setSelectedCompanion(agent);
+    navigate('/setup');
+  };
 
   return (
     <div className="w-full min-h-screen bg-[#F8F2ED] flex flex-col items-center justify-center p-8 box-border">
@@ -16,7 +26,7 @@ const CompanionSelection = ({ onSelect, agents }) => {
 
         <div className="flex flex-wrap justify-center gap-20">
           {agents && agents.map((agent) => (
-            <CompanionCard key={agent.id} agent={agent} onSelect={onSelect} />
+            <CompanionCard key={agent.id} agent={agent} onSelect={handleSelect} />
           ))}
         </div>
       </div>

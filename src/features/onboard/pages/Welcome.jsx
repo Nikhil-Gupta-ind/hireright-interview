@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
+import { useSessionContext } from '../../../context/SessionContext';
 import logo from '../../../assets/logo.svg'
 import ArrowIcon from '../../../assets/icons/icon-arrow-forward.svg?react'
 import { fetchSessionDetails } from '../../../core/services/session';
 
-const Welcome = ({ title, onClick, setSessionData }) => {
+const Welcome = () => {
   const { sessionCode } = useParams();
+  const navigate = useNavigate();
+  const { sessionData, setSessionData } = useSessionContext();
   const [loading, setLoading] = useState(!!sessionCode);
   const [error, setError] = useState(null);
 
@@ -55,10 +58,10 @@ const Welcome = ({ title, onClick, setSessionData }) => {
         Welcomes you to your
         <br />
         <span className="heading-serif">
-          {title || 'Interview'}
+          {sessionData?.title || 'Interview'}
         </span> Interview
       </p>
-      <button onClick={onClick} className="px-3 py-4 rounded-full border border-[#D5621B] flex items-center justify-center text-[#D5621B] hover:bg-[#D5621B] hover:text-white transition">
+      <button onClick={() => navigate('/companion')} className="px-3 py-4 rounded-full border border-[#D5621B] flex items-center justify-center text-[#D5621B] hover:bg-[#D5621B] hover:text-white transition">
         <ArrowIcon />
       </button>
     </div>
