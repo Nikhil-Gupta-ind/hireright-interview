@@ -52,3 +52,24 @@ export const fetchSessionSummary = async (sessionCode) => { // T9SZYEIQ
 
     return data.data;
 };
+
+export const submitRating = async (sessionCode, rating) => {
+    const response = await fetch(`${API_BASE_URL}/sessions/${sessionCode}/rating`, {
+        method: 'PATCH',
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            rating
+        })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+        throw new Error(data.message || 'Failed to submit rating');
+    }
+
+    return data;
+};
