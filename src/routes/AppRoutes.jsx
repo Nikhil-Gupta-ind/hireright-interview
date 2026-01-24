@@ -1,4 +1,5 @@
-import { Route, Routes, Navigate } from 'react-router';
+import { Route, Routes, Navigate, useNavigate } from 'react-router';
+import { useEffect } from 'react';
 import { LiveKitRoom, RoomAudioRenderer } from '@livekit/components-react';
 import { useSessionContext } from '../context/SessionContext';
 import Welcome from '../features/onboard/pages/Welcome';
@@ -9,11 +10,32 @@ import Feedback from '../features/feedback/Feedback';
 import NotFound from '../features/common/pages/NotFound';
 import '@livekit/components-styles';
 
+const NavigateBack = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate(-1);
+  }, [navigate]);
+  return null;
+};
+
+let isInitialLoad = true;
+
+const InterviewGuard = ({ children }) => {
+  if (isInitialLoad) {
+    return <NavigateBack />;
+  }
+  return children;
+};
+
 const AppRoutes = () => {
   const {
     sessionData,
     selectedDevices,
   } = useSessionContext();
+
+  useEffect(() => {
+    isInitialLoad = false;
+  }, []);
 
   return (
     <Routes>
@@ -36,7 +58,8 @@ const AppRoutes = () => {
       />
 
       <Route path='/interview' element={
-        <LiveKitRoom
+        <InterviewGuard>
+          <LiveKitRoom
             token={sessionData?.connection?.token}
             serverUrl={sessionData?.connection?.serverUrl}
             connect={true}
@@ -46,6 +69,7 @@ const AppRoutes = () => {
             <Interview />
             <RoomAudioRenderer />
           </LiveKitRoom>
+        </InterviewGuard>
       }
       />
 

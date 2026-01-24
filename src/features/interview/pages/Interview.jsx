@@ -14,7 +14,7 @@ const Interview = () => {
   const sessionCode = sessionData?.sessionCode;
 
   const onInterviewEnd = () => {
-    setSessionData(null); // FIXME: is this needed? on navigating to feedback it goes to 404 check
+    setSessionData(null);
     navigate("/feedback", { replace: true })
   };
 
