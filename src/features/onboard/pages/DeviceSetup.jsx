@@ -9,16 +9,69 @@ import ArrowIcon from "../../../assets/icons/icon-arrow-forward.svg?react"
 import Header from "../components/Header"
 import AudioTest from "../components/AudioTest"
 import { getAudioDeviceIcon, getMicDeviceIcon } from "../utils/deviceIcons"
-import DotsFlashing from "../components/DotsFlashing"
-import { startSession } from "../../../core/services/session"
+import Guidelines from "../components/Guidelines"
+import PhotoPreview from "../components/PhotoPreview"
+import { startSession, uploadEnrollmentPhoto } from "../../../core/services/session"
 
 const DeviceSetup = () => {
   const navigate = useNavigate();
   const { sessionData, selectedCompanion, selectedDevices, setSelectedDevices } = useSessionContext();
   const sessionCode = sessionData?.sessionCode;
 
-  const onBack = () => navigate(-1);
+  const [mode, setMode] = useState('setup'); // 'setup' | 'capture'
+  const [capturedImage, setCapturedImage] = useState(null);
+  const videoRef = useRef(null);
+
+  const onBack = () => {
+    if (mode === 'capture') {
+      window.history.back();
+    } else {
+      navigate(-1);
+    }
+  };
+
   const onStartInterview = () => navigate('/interview');
+
+  const onNext = () => {
+    setMode('capture');
+    window.history.pushState({ mode: 'capture' }, '');
+  };
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (mode === 'capture') {
+        setMode('setup');
+        setCapturedImage(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [mode]);
+
+  const onTakePhoto = () => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+
+      // Mirror the image to match the preview
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob((blob) => {
+        setCapturedImage(blob);
+      }, 'image/jpeg');
+    }
+  };
+
+  const onRetake = () => {
+    setCapturedImage(null);
+  };
 
   const [isLoading, setIsLoading] = useState(false);
   const [localVideoTrack, setLocalVideoTrack] = useState(null);
@@ -165,8 +218,17 @@ const DeviceSetup = () => {
       return;
     }
 
+    if (!capturedImage) {
+      alert("Please capture a photo first.");
+      return;
+    }
+
     setIsLoading(true);
     try {
+      // 1. Upload Image
+      await uploadEnrollmentPhoto(sessionCode, capturedImage);
+
+      // 2. Start Session
       await startSession(sessionCode, selectedCompanion.id);
 
       // Stop local tracks before navigating
@@ -188,126 +250,126 @@ const DeviceSetup = () => {
 
   return (
     <div className="min-h-screen bg-(--color-bg) px-4 py-6 sm:p-8 lg:p-16 relative flex flex-col">
-      <Header onBack={onBack} />
+      <Header onBack={onBack} mode={mode} />
 
       {/* Main Content */}
-      <div className="w-full flex-1 flex items-center justify-center lg:-translate-y-18">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16.75 w-full max-w-6xl items-start lg:items-center">
-          {/* Left */}
-          <div className="flex justify-center">
-            <CameraPreview
-              localVideoTrack={localVideoTrack}
-              permissionGranted={permissionGranted}
-              permissionDenied={permissionDenied}
-              onRequestPermission={handleRequestPermission}
-            />
-          </div>
-
-          {/* Right */}
-          <div className={!permissionGranted ? 'opacity-50 pointer-events-none grayscale' : ''}>
-
-            <div className="relative">
-              {!permissionGranted && (
-                <div className="absolute -top-10 left-0 text-sm font-medium text-[#5B3823]">
-                  Permission needed
-                </div>
+      <div className="flex-1 flex items-center justify-center lg:-translate-y-10">
+        <div className={`flex flex-col lg:flex-row w-full max-w-6xl 
+          ${mode === 'setup' ? 'gap-6 lg:gap-16.75' : 'gap-0 lg:gap-[32px]'} 
+          items-center lg:items-start`}>
+          {/* <div className={`bg-blue-600 flex flex-col lg:flex-row ${mode === 'setup' ? 'gap-6 lg:gap-16.75' : 'gap-0 lg:gap-[32px]'} w-full max-w-6xl items-center justify-start`}> */}
+          {/* <div className="h-full bg-blue-600 flex flex-col lg:flex-row gap-6 lg:gap-16.75 w-full max-w-6xl items-center lg:items-center"> */}
+          {/* <div className="h-full bg-blue-600 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16.75 w-full max-w-6xl items-start lg:items-center"> */}
+            {/* Left */}
+            <div className="flex-none flex flex-col items-center justify-center">
+              <CameraPreview
+                localVideoTrack={localVideoTrack}
+                permissionGranted={permissionGranted}
+                permissionDenied={permissionDenied}
+                onRequestPermission={handleRequestPermission}
+                videoRef={videoRef}
+                mode={mode}
+              />
+            </div>
+            {/* Right */}
+            <div className={`flex-1 ${!permissionGranted ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
+              {mode === 'setup' && (
+                <>
+                  <div className="relative">
+                    {!permissionGranted && (
+                      <div className="absolute -top-10 left-0 text-sm font-medium text-[#5B3823]">
+                        Permission needed
+                      </div>
+                    )}
+                    {selectedDevices.mic && (
+                      <DeviceSelect
+                        selectedOption={selectedDevices.mic}
+                        options={micOptions}
+                        onOptionSelected={async (opt) => {
+                          setSelectedDevices(prev => ({
+                            ...prev,
+                            mic: opt
+                          }));
+                          // stop and remove old audio track
+                          if (localAudioTrack) {
+                            localAudioTrack.stop();
+                            tracksRef.current = tracksRef.current.filter(
+                              t => t.kind !== 'audio'
+                            );
+                          }
+                          // create new audio track
+                          const [newAudioTrack] = await createLocalTracks({
+                            audio: { deviceId: { exact: opt.deviceId } },
+                            video: false,
+                          });
+                          // track it for cleanup
+                          tracksRef.current.push(newAudioTrack);
+                          setLocalAudioTrack(newAudioTrack);
+                          setAudioTrackVersion(v => v + 1);
+                        }}
+                      />
+                    )}
+                  </div>
+                  {selectedDevices.speaker && (
+                    <DeviceSelect
+                      selectedOption={selectedDevices.speaker}
+                      options={speakerOptions}
+                      className='mt-4.5'
+                      onOptionSelected={(opt) => {
+                        setSelectedDevices(prev => ({
+                          ...prev,
+                          speaker: opt
+                        }));
+                      }}
+                    />
+                  )}
+                  <AudioTest
+                    className='mt-4.5 select-none'
+                    track={localAudioTrack}
+                    trackVersion={audioTrackVersion}
+                    speakerDeviceId={selectedDevices.speaker?.deviceId}
+                  />
+                  {selectedDevices.camera && (
+                    <DeviceSelect
+                      selectedOption={selectedDevices.camera}
+                      options={camOptions}
+                      className='mt-6.5'
+                      onOptionSelected={async (opt) => {
+                        setSelectedDevices(prev => ({
+                          ...prev,
+                          camera: opt
+                        }));
+                        if (localVideoTrack) {
+                          try {
+                            await localVideoTrack.restartTrack({ deviceId: opt.deviceId });
+                          } catch (e) { console.error("Failed to switch camera", e) }
+                        }
+                      }}
+                    />
+                  )}
+                  <button
+                    onClick={onNext}
+                    disabled={isLoading || !permissionGranted}
+                    className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:cursor-not-allowed justify-center">
+                    Next
+                    <ArrowIcon />
+                  </button>
+                </>
               )}
-              {selectedDevices.mic && (
-                <DeviceSelect
-                  selectedOption={selectedDevices.mic}
-                  options={micOptions}
-                  onOptionSelected={async (opt) => {
-                    setSelectedDevices(prev => ({
-                      ...prev,
-                      mic: opt
-                    }));
-
-                    // stop and remove old audio track
-                    if (localAudioTrack) {
-                      localAudioTrack.stop();
-                      tracksRef.current = tracksRef.current.filter(
-                        t => t.kind !== 'audio'
-                      );
-                    }
-
-                    // create new audio track
-                    const [newAudioTrack] = await createLocalTracks({
-                      audio: { deviceId: { exact: opt.deviceId } },
-                      video: false,
-                    });
-
-                    // track it for cleanup
-                    tracksRef.current.push(newAudioTrack);
-
-                    setLocalAudioTrack(newAudioTrack);
-                    setAudioTrackVersion(v => v + 1);
-
-                    // if (localAudioTrack) {
-                    //   try {
-                    //     await localAudioTrack.restartTrack({ deviceId: opt.deviceId });
-                    //     setAudioTrackVersion(v => v + 1);
-                    //   } catch (e) { console.error("Failed to switch microphone", e); }
-                    // }
-                  }}
+              {mode === 'capture' && !capturedImage && (
+                <Guidelines onTakePhoto={onTakePhoto} />
+              )}
+              {mode === 'capture' && capturedImage && (
+                <PhotoPreview
+                  photoUrl={URL.createObjectURL(capturedImage)}
+                  onRetake={onTakePhoto}
+                  onStartInterview={handleStartInterview}
+                  isLoading={isLoading}
                 />
               )}
             </div>
-
-            {selectedDevices.speaker && (
-              <DeviceSelect
-                selectedOption={selectedDevices.speaker}
-                options={speakerOptions}
-                className='mt-4.5'
-                onOptionSelected={(opt) => {
-                  setSelectedDevices(prev => ({
-                    ...prev,
-                    speaker: opt
-                  }));
-                }}
-              />
-            )}
-
-            <AudioTest
-              className='mt-4.5 select-none'
-              track={localAudioTrack}
-              trackVersion={audioTrackVersion}
-              speakerDeviceId={selectedDevices.speaker?.deviceId}
-            />
-
-            {selectedDevices.camera && (
-              <DeviceSelect
-                selectedOption={selectedDevices.camera}
-                options={camOptions}
-                className='mt-6.5'
-                onOptionSelected={async (opt) => {
-                  setSelectedDevices(prev => ({
-                    ...prev,
-                    camera: opt
-                  }));
-
-                  if (localVideoTrack) {
-                    try {
-                      await localVideoTrack.restartTrack({ deviceId: opt.deviceId });
-                    } catch (e) { console.error("Failed to switch camera", e) }
-                  }
-                }}
-              />
-            )}
-
-            <button
-              onClick={handleStartInterview}
-              disabled={isLoading || !permissionGranted}
-              className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:cursor-not-allowed min-w-[185px] justify-center">
-              {isLoading ? <DotsFlashing /> : (
-                <>
-                  Start Interview
-                  <ArrowIcon />
-                </>
-              )}
-            </button>
           </div>
         </div>
-      </div>
     </div>
   )
 }

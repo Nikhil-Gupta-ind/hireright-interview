@@ -52,3 +52,26 @@ export const fetchSessionSummary = async (sessionCode) => { // T9SZYEIQ
 
     return data.data;
 };
+
+export const uploadEnrollmentPhoto = async (sessionCode, photoBlob) => {
+    const formData = new FormData();
+    formData.append('photo', photoBlob, `${sessionCode}.jpg`);
+    formData.append('type', 'image/jpeg');
+
+    const response = await fetch(`${API_BASE_URL}/enrollment-photo/${sessionCode}`, {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            // 'Content-Type': 'multipart/form-data' // Browser sets this automatically with boundary for FormData
+        },
+        body: formData
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+        throw new Error(data.message || 'Failed to upload photo');
+    }
+
+    return data.data;
+};

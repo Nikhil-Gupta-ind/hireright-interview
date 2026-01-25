@@ -1,5 +1,5 @@
 /* fonts */
-@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap");
 
 @import "tailwindcss";
@@ -18,11 +18,27 @@
   --ease-fast-out-slow-in: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+@theme {
+  --font-dm-serif: "DM Serif Display", serif;
+  --font-hanken: "Hanken Grotesk", sans-serif;
+}
+
 @keyframes flashing {
-  0% { opacity: 0.2; }
-  25% { opacity: 1; }
-  50% { opacity: 0.2; }
-  100% { opacity: 0.2; }
+  0% {
+    opacity: 0.2;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
 }
 
 .animate-flashing {
@@ -64,11 +80,6 @@
 ::-webkit-scrollbar {
   display: none;
 }
-
-/* @theme {
-  --font-dm-serif: "DM Serif Display", serif;
-  --font-hanken: "Hanken Grotesk", sans-serif;
-} */
 
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

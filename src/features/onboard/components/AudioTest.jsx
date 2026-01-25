@@ -99,10 +99,10 @@ const AudioTest = ({ track, trackVersion, speakerDeviceId, className = "" }) => 
       {/* Test Button */}
       <button
         onClick={handleTestClick}
-        className="flex gap-2.5 py-4 pl-4.5 pr-6 bg-[#E0E1F9] border border-[#3637A9] rounded-tl-[56px] rounded-bl-[56px] rounded-tr-[18px] rounded-br-[18px] items-center hover:brightness-95 shrink-0 min-w-28"
+        className={`text-white flex gap-2.5 py-4 pl-4.5 pr-6 ${isTesting ? 'bg-[#3637A9]' : 'bg-[#E0E1F9]'} border border-[#3637A9] rounded-tl-[56px] rounded-bl-[56px] rounded-tr-[18px] rounded-br-[18px] items-center hover:brightness-95 shrink-0 min-w-28`}
       >
         {isTesting ? <StopIcon /> : <PlayIcon />}
-        <span className="text-[#3637A9] font-hanken text-[16px] font-medium leading-[22.4px]">
+        <span className={`${isTesting ? 'text-white' : 'text-[#3637A9]'} font-hanken text-[16px] font-medium leading-[22.4px]`}>
           {isTesting ? 'Stop' : 'Test'}
         </span>
       </button>

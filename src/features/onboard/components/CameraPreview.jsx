@@ -1,12 +1,18 @@
 import { useRef, useEffect } from 'react';
 import sample from '../../../assets/sample-video-call.png'
 
-const CameraPreview = ({ localVideoTrack, permissionGranted, permissionDenied, onRequestPermission }) => {
-  const videoRef = useRef(null);
+const CameraPreview = ({ localVideoTrack, permissionGranted, permissionDenied, onRequestPermission, videoRef, mode = 'setup' }) => {
+  const internalVideoRef = useRef(null);
+  const isCapture = mode === 'capture';
+
+  // Setup dimensions: 515x386
+  // Capture dimensions: 701x481
+  const width = isCapture ? 701 : 515;
+  const height = isCapture ? 525 : 386;
 
   useEffect(() => {
-    if (localVideoTrack && videoRef.current) {
-      localVideoTrack.attach(videoRef.current);
+    if (localVideoTrack && internalVideoRef.current) {
+      localVideoTrack.attach(internalVideoRef.current);
     }
     return () => {
       // Detach when component unmounts or track changes
@@ -17,15 +23,24 @@ const CameraPreview = ({ localVideoTrack, permissionGranted, permissionDenied, o
   }, [localVideoTrack]);
 
   return (
-    // w-[515px] h-96.5 bg-[#D6C5B8]
     <div
-      className='h-96.5 rounded-3xl relative flex items-center justify-center overflow-hidden select-none bg-black'
-      style={{ aspectRatio: '515/386' }}
+      className={`${isCapture ? 'lg:h-[525px]' : 'lg:h-[386px]'} rounded-[24px] relative flex items-center justify-center overflow-hidden select-none bg-black transition-all duration-300 ease-in-out`}
+      style={{
+        // width: `${width}px`,
+        // height: `${height}px`,
+        aspectRatio: `${width}/${height}`
+      }}
     >
       {/* Camera Preview */}
       {localVideoTrack ? (
         <video
-          ref={videoRef}
+          ref={(el) => {
+            internalVideoRef.current = el;
+            if (videoRef) {
+              if (typeof videoRef === 'function') videoRef(el);
+              else videoRef.current = el;
+            }
+          }}
           className="w-full h-full object-cover"
           style={{ width: '100%', height: '100%', transform: 'scale(-1, 1)' }} // Mirror local video
           muted // Local audio should be muted to prevent feedback
