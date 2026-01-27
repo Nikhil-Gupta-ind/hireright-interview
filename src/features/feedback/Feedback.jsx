@@ -13,13 +13,13 @@ const Feedback = () => {
   const handleRatingChange = async (newRating) => {
     setRating(newRating);
 
-    if (!sessionData?.code) {
-      console.error("No session code available for rating submission.");
+    if (!sessionData?.sessionCode) {
+      console.error("No session code available for rating submission.", { sessionData });
       return;
     }
 
     try {
-      const response = await submitRating(sessionData.code, newRating);
+      const response = await submitRating(sessionData.sessionCode, newRating);
       toast.success(response.message || "Rating updated successfully");
     } catch (error) {
       toast.error(error.message || "Failed to submit rating");
