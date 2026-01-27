@@ -14,7 +14,7 @@ const Interview = () => {
   const sessionCode = sessionData?.sessionCode;
 
   const onInterviewEnd = () => {
-    setSessionData(null);
+    // setSessionData(null); // need session code for rating
     navigate("/feedback", { replace: true })
   };
 
