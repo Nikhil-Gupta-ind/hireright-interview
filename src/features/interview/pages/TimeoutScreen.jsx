@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { useSessionContext } from '../../../context/SessionContext';
 import Avatar from '../components/Avatar';
 import { IconArrowForward as ArrowForwardIcon } from '../../../assets/images';
-import HRGradient from '../components/gradient';
+import HRGradient from '../components/Gradient';
 
 const TimeoutScreen = () => {
   const navigate = useNavigate();

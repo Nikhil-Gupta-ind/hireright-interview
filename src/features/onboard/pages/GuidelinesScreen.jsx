@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { IconArrowForward as ArrowForwardIcon } from '../../../assets/images';
-import HRGradient from '../../interview/components/gradient';
+import HRGradient from '../../interview/components/Gradient';
 
 const GuidelinesScreen = () => {
   const navigate = useNavigate();
