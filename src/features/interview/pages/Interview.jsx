@@ -4,7 +4,7 @@ import { useParticipants, useLocalParticipant, useRoomContext } from "@livekit/c
 import { useSessionContext } from "../../../context/SessionContext";
 import InterviewBody from "../components/InterviewBody";
 import InterviewFooter from "../components/InterviewFooter";
-import HRGradient from "../components/gradient";
+import HRGradient from "../components/Gradient";
 import { useInterviewState } from "../hooks/useInterviewState";
 import { INTERVIEW_STATES } from "../constants/interviewStates";
 import TimeoutScreen from "./TimeoutScreen";
