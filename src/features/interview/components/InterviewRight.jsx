@@ -1,11 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { VideoTrack, useTracks, useLocalParticipant, useTranscriptions } from "@livekit/components-react";
 import { Track } from "livekit-client";
-import ClockIcon from '../../../assets/icons/icon-clock.svg?react'
-import KeyboardIcon from '../../../assets/icons/icon-keyboard.svg?react'
-import AddIcon from '../../../assets/icons/icon-add.svg?react'
-import fcamBlur from '../../../assets/fcam-blur.svg'
-import fcamBlur2 from '../../../assets/fcam-blur2.svg'
+import { IconClock as ClockIcon, IconKeyboard as KeyboardIcon, IconAdd as AddIcon, fcamBlur, fcamBlur2 } from '../../../assets/images';
 import { useEffect, useState, useMemo, useRef } from "react"
 
 const InterviewRight = ({ duration, quesNum, showAnswerCard, showBlurBg, onImageClick }) => {

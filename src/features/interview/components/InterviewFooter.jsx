@@ -1,4 +1,4 @@
-import ArrowIcon from '../../../assets/icons/icon-arrow-forward.svg?react'
+import { IconArrowForward as ArrowIcon } from '../../../assets/images';
 
 const InterviewFooter = ({ onFinish }) => {
   return (
@@ -7,9 +7,9 @@ const InterviewFooter = ({ onFinish }) => {
 
       <button
         onClick={onFinish}
-        className={`px-6 py-4 rounded-[18px] bg-black text-white flex items-center gap-3 hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none`}
+        className={`group px-6 py-4 rounded-[18px] bg-black text-white flex items-center gap-3 hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none`}
       >
-        Finish Interview<ArrowIcon />
+        Finish Interview<ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1" />
       </button>
     </div>
   );

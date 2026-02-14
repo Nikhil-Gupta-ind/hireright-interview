@@ -1,7 +1,5 @@
 import React from 'react';
-import SpeakerIcon from "../../../assets/icons/icon-speaker.svg?react"
-import MicIcon from "../../../assets/icons/icon-mic.svg?react"
-import CameraIcon from "../../../assets/icons/icon-camera.svg?react"
+import { IconSpeaker as SpeakerIcon, IconMic as MicIcon, IconCamera as CameraIcon } from "../../../assets/images";
 
 // --- ICONS (Material Design, matching Android) ---
 export const IconBluetooth = ({ className = "w-5 h-5", ...props }) => (

@@ -1,7 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
-import StarIcon from '../../assets/icons/icon-star.svg?react'
-import StarFilledIcon from '../../assets/icons/icon-star-filled.svg?react'
-import StarHalfIcon from '../../assets/icons/icon-star-half.svg?react'
+import { IconStar as StarIcon, IconStarFilled as StarFilledIcon, IconStarHalf as StarHalfIcon } from '../../assets/images';
 
 const StarRating = ({ rating, onRatingChange }) => {
   const [visualRating, setVisualRating] = useState(rating)

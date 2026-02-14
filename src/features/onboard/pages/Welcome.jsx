@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useSessionContext } from '../../../context/SessionContext';
-import logo from '../../../assets/logo.svg'
-import ArrowIcon from '../../../assets/icons/icon-arrow-forward.svg?react'
+import { logo, IconArrowForward as ArrowIcon } from '../../../assets/images';
 import { fetchSessionDetails } from '../../../core/services/session';
 import DotsFlashing from '../components/DotsFlashing';
 

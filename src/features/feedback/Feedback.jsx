@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
-import logo from '../../assets/logo.svg';
-import ArrowIcon from '../../assets/icons/icon-arrow-forward.svg?react';
+import { logo, IconArrowForward as ArrowIcon } from '../../assets/images';
 import RatingBar from '../component/RatingBar';
 import { useSessionContext } from '../../context/SessionContext';
 import { submitRating } from '../../core/services/session';
@@ -48,8 +47,8 @@ const Feedback = () => {
               Interviewing
             </span> you!
           </p>
-          <button onClick={() => window.open('https://hire-right.ai', '_blank')} className="rounded-2xl flex items-center justify-center gap-4 py-[18.5px] px-6 text-(--color-primary) active:scale-95 hover:bg-(--color-primary) hover:text-white transition cursor-pointer">
-            Know more about us <ArrowIcon />
+          <button onClick={() => window.open('https://hire-right.ai', '_blank')} className="group rounded-2xl flex items-center justify-center gap-4 py-[18.5px] px-6 text-(--color-primary) active:scale-95 hover:bg-(--color-primary) hover:text-white transition cursor-pointer">
+            Know more about us <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1" />
           </button>
         </div>
       </div>

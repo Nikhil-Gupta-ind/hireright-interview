@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DotsFlashing = ({ dotColor = 'white' }) => {
   return (
     <div className="flex gap-[5px] items-center justify-center h-6">

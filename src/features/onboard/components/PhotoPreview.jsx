@@ -1,4 +1,4 @@
-import ArrowIcon from "../../../assets/icons/icon-arrow-forward.svg?react"
+import { IconArrowForward as ArrowIcon } from "../../../assets/images";
 import DotsFlashing from "./DotsFlashing"
 
 const PhotoPreview = ({ photoUrl, onRetake, onStartInterview, isLoading }) => {
@@ -28,7 +28,7 @@ const PhotoPreview = ({ photoUrl, onRetake, onStartInterview, isLoading }) => {
           <button
             onClick={onStartInterview}
             disabled={isLoading}
-            className="w-full h-[56px] flex gap-[12px] text-white bg-(--color-primary) border border-(--color-primary) pl-[24px] pr-[20px] py-[16px] rounded-[18px] items-center justify-center hover:brightness-90 active:scale-95 transition-all duration-150 ease-in-out select-none disabled:cursor-not-allowed disabled:opacity-70 font-hanken font-semibold text-[16px] tracking-[-0.2px]"
+            className="group w-full h-[56px] flex gap-[12px] text-white bg-(--color-primary) border border-(--color-primary) pl-[24px] pr-[20px] py-[16px] rounded-[18px] items-center justify-center hover:brightness-90 active:scale-95 transition-all duration-150 ease-in-out select-none disabled:cursor-not-allowed disabled:opacity-70 font-hanken font-semibold text-[16px] tracking-[-0.2px]"
           >
             {isLoading ? (
               // <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -36,7 +36,7 @@ const PhotoPreview = ({ photoUrl, onRetake, onStartInterview, isLoading }) => {
             ) : (
               <>
                 Start Interview
-                <ArrowIcon />
+                <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1" />
               </>
             )}
           </button>

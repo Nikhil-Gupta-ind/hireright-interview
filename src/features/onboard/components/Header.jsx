@@ -1,4 +1,4 @@
-import BackIcon from '../../../assets/icons/icon-back.svg?react';
+import { IconBack as BackIcon } from '../../../assets/images';
 
 const Header = ({ onBack, mode = 'setup' }) => {
   const isCaptureMode = mode === 'capture';

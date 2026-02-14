@@ -1,4 +1,4 @@
-import CameraIcon from '../../../assets/icons/icon-camera.svg?react'
+import { IconCamera as CameraIcon } from '../../../assets/images';
 
 const Guidelines = ({ onTakePhoto }) => {
   const guidelines = [

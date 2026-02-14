@@ -1,5 +1,4 @@
 import { useRef, useEffect } from 'react';
-import sample from '../../../assets/sample-video-call.png'
 
 const CameraPreview = ({ localVideoTrack, permissionGranted, permissionDenied, onRequestPermission, videoRef, mode = 'setup' }) => {
   const internalVideoRef = useRef(null);

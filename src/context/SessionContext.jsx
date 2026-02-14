@@ -1,7 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import MicIcon from '../assets/icons/icon-mic.svg?react';
-import CameraIcon from '../assets/icons/icon-camera.svg?react';
-import SpeakerIcon from '../assets/icons/icon-speaker.svg?react';
+import { IconMic as MicIcon, IconCamera as CameraIcon, IconSpeaker as SpeakerIcon } from '../assets/images';
 
 const SessionContext = createContext(null);
 

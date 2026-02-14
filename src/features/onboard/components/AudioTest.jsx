@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createAudioAnalyser } from "livekit-client";
-import PlayIcon from "../../../assets/icons/icon-play.svg?react";
-import StopIcon from "../../../assets/icons/icon-stop.svg?react";
+import { IconPlay as PlayIcon, IconStop as StopIcon } from "../../../assets/images";
 
 const BAR_WIDTH = 12;
 const BAR_GAP = 4;

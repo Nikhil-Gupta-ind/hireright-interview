@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import ChevronIcon from "../../../assets/icons/icon-chevron.svg?react"
+import { IconChevron as ChevronIcon } from "../../../assets/images";
 
 const DeviceSelect = ({
   selectedOption,

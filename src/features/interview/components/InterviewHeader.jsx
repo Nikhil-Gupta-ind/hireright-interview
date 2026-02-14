@@ -1,4 +1,4 @@
-import Logo from "../../../assets/logo-square.svg?react"
+import { LogoSquare as Logo } from "../../../assets/images";
 
 const InterviewHeader = () => {
   return (

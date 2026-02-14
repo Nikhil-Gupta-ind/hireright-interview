@@ -20,5 +20,13 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     allowedHosts: ['.ngrok-free.dev', '.trycloudflare.com', 'localhost'],
+    // VITE_API_BASE_URL=/api/v1 TODO: Remove this
+    // proxy: {
+    //   '/api': {
+    //     target: 'https://api.hire-right.ai',
+    //     changeOrigin: true,
+    //     secure: true,
+    //   }
+    // }
   }
 })

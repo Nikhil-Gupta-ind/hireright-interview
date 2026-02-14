@@ -4,8 +4,7 @@ import { useNavigate } from "react-router"
 import { useSessionContext } from "../../../context/SessionContext"
 import CameraPreview from "../components/CameraPreview"
 import DeviceSelect from "../components/DeviceSelect"
-import CameraIcon from '../../../assets/icons/icon-camera.svg?react'
-import ArrowIcon from "../../../assets/icons/icon-arrow-forward.svg?react"
+import { IconCamera as CameraIcon, IconArrowForward as ArrowIcon } from '../../../assets/images';
 import Header from "../components/Header"
 import AudioTest from "../components/AudioTest"
 import { getAudioDeviceIcon, getMicDeviceIcon } from "../utils/deviceIcons"
@@ -350,9 +349,9 @@ const DeviceSetup = () => {
                   <button
                     onClick={onNext}
                     disabled={isLoading || !permissionGranted}
-                    className="flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:cursor-not-allowed justify-center">
+                    className="group flex gap-3 text-white bg-(--color-primary) px-6 py-4 rounded-[18px] mt-6 items-center hover:brightness-90 active:scale-95 transition-transform duration-150 ease-in-out select-none disabled:cursor-not-allowed justify-center">
                     Next
-                    <ArrowIcon />
+                    <ArrowIcon className="transition-transform duration-300 group-hover:translate-x-1" />
                   </button>
                 </>
               )}
