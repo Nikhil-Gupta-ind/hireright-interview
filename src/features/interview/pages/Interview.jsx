@@ -7,6 +7,7 @@ import InterviewFooter from "../components/InterviewFooter";
 import HRGradient from "../components/gradient";
 import { useInterviewState } from "../hooks/useInterviewState";
 import { INTERVIEW_STATES } from "../constants/interviewStates";
+import TimeoutScreen from "./TimeoutScreen";
 
 const Interview = () => {
   const navigate = useNavigate();
@@ -31,12 +32,16 @@ const Interview = () => {
   const localParticipant = useLocalParticipant();
 
   const [questionOver, setQuestionOver] = useState(false) // all questions completed but interview is not ended
+  const [isTimeout, setIsTimeout] = useState(false);
 
   useEffect(() => {
     if (currentState === INTERVIEW_STATES.ENDING) {
-      setQuestionOver(true)
+      setQuestionOver(true);
     }
-  }, [currentState])
+    if (currentState === INTERVIEW_STATES.TIMEUP) {
+      setIsTimeout(true);
+    }
+  }, [currentState]);
 
   useEffect(() => {
     console.log("Local Participant:", localParticipant);
@@ -67,6 +72,10 @@ const Interview = () => {
     console.log("[Interview] Current State:", currentState);
   }, [currentState]);
 
+  if (isTimeout) {
+    return <TimeoutScreen />;
+  }
+
   return (
     <div className={`h-screen ${currentState === INTERVIEW_STATES.COMPLETE ? "bg-(--color-bg)" : "bg-[#FEFEFE]"} p-8 sm:p-12 lg:p-18 relative flex flex-col overflow-clip`}>
 
@@ -83,14 +92,16 @@ const Interview = () => {
           state={currentState}
           questionOver={questionOver}
         />
-        {questionOver && <InterviewFooter
-          onFinish={() => {
-            onInterviewEnd()
-          }}
-        />}
+        {questionOver && (
+          <InterviewFooter
+            onFinish={() => {
+              onInterviewEnd();
+            }}
+          />
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Interview
+export default Interview;

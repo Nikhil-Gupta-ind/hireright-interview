@@ -6,6 +6,8 @@ import Welcome from '../features/onboard/pages/Welcome';
 import CompanionSelection from '../features/onboard/pages/CompanionSelection';
 import DeviceSetup from '../features/onboard/pages/DeviceSetup';
 import Interview from '../features/interview/pages/Interview';
+import TimeoutScreen from '../features/interview/pages/TimeoutScreen';
+import GuidelinesScreen from '../features/onboard/pages/GuidelinesScreen';
 import Feedback from '../features/feedback/Feedback';
 import NotFound from '../features/common/pages/NotFound';
 import '@livekit/components-styles';
@@ -73,6 +75,8 @@ const AppRoutes = () => {
       }
       />
 
+      <Route path='/timeout' element={<TimeoutScreen />} />
+      <Route path='/guidelines' element={<GuidelinesScreen />} />
       <Route path='/feedback' element={<Feedback />} />
       <Route path='*' element={<NotFound />} />
     </Routes>

@@ -10,6 +10,14 @@ const Feedback = () => {
   const { sessionData } = useSessionContext();
   const [rating, setRating] = useState(0);
 
+  const playToastSound = (type = 'success') => {
+    const successSound = 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3';
+    const errorSound = 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3';
+    const audio = new Audio(type === 'success' ? successSound : errorSound);
+    audio.volume = 0.4;
+    audio.play().catch(err => console.debug("Audio play blocked by browser:", err));
+  };
+
   const handleRatingChange = async (newRating) => {
     setRating(newRating);
 
@@ -20,15 +28,17 @@ const Feedback = () => {
 
     try {
       const response = await submitRating(sessionData.sessionCode, newRating);
+      playToastSound('success');
       toast.success(response.message || "Rating updated successfully");
     } catch (error) {
+      playToastSound('error');
       toast.error(error.message || "Failed to submit rating");
     }
   };
 
   return (
     <div className='h-screen w-full bg-(--color-bg) flex flex-col items-center justify-evenly p-18 relative'>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-center" />
       <div className='flex-1 flex flex-col items-center justify-center w-full'>
         <div className='flex flex-col items-center justify-center gap-11'>
           <img src={logo} alt="hireright" />

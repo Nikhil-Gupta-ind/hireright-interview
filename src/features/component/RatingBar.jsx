@@ -39,7 +39,7 @@ const StarRating = ({ rating, onRatingChange }) => {
 
     debounceTimer.current = setTimeout(() => {
       onRatingChange(newRating)
-    }, 500)
+    }, 10)
   }
 
   const handlePointerMove = (e) => {

@@ -4,6 +4,7 @@ import { useSessionContext } from '../../../context/SessionContext';
 import logo from '../../../assets/logo.svg'
 import ArrowIcon from '../../../assets/icons/icon-arrow-forward.svg?react'
 import { fetchSessionDetails } from '../../../core/services/session';
+import DotsFlashing from '../components/DotsFlashing';
 
 const Welcome = () => {
   const { sessionCode } = useParams();
@@ -33,9 +34,7 @@ const Welcome = () => {
   if (loading) {
     return (
       <div className='h-screen w-full bg-[#F8F2ED] flex flex-col items-center justify-center'>
-        <div className="animate-pulse text-[#D5621B] font-medium">
-          Loading session...
-        </div>
+        <DotsFlashing dotColor="#D5621B" />
       </div>
     )
   }
