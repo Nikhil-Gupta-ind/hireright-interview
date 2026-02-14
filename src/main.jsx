@@ -5,7 +5,9 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router'
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
+  <BrowserRouter
+    basename={import.meta.env.PROD ? "/hireright-interview" : "/"}
+  >
     <App />
   </BrowserRouter>,
 )

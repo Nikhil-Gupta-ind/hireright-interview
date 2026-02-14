@@ -6,6 +6,9 @@ import srgr from 'vite-plugin-svgr'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === 'production'
+  ? '/hireright-interview/'
+  : '/',
   plugins: [
     react({
       babel: {
@@ -20,13 +23,9 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     allowedHosts: ['.ngrok-free.dev', '.trycloudflare.com', 'localhost'],
-    // VITE_API_BASE_URL=/api/v1 TODO: Remove this
-    // proxy: {
-    //   '/api': {
-    //     target: 'https://api.hire-right.ai',
-    //     changeOrigin: true,
-    //     secure: true,
-    //   }
-    // }
+  },
+  preview: {
+    port: 5173,
+    strictPort: true,
   }
 })
